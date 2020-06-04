@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} 
+{% block body %}
+
+  <h1>Like the resturants!</h1>
+
+  <div id="resturant widgets">
+    Display resturants
+
+  </div>
+
+{% endblock %} 
+
+{% block js %}
+<!-- <script src="/static/js/homepage.jsx" type="text/jsx"></script> -->
+{% endblock %}

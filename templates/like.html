@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} 
+{% block body %}
+
+  <h1>Like the resturants!</h1>
+
+  <div id="resturant-widgets">
+    {% for business in list_business %}
+      <p>
+        <form method="POST">
+          <legend>{{ business.yelp_alias }}</legend>
+            <label><input type="radio" name="liked" value="True"> Liked</label>
+            <label><input type="radio" name="liked" value="False"> No</label>
+          </fieldset>
+        </form>
+      </p>
+    {% endfor %}
+    <p><button type="submit">DONE</button></p>
+
+  </div>
+
+{% endblock %} 
+
+{% block js %}
+<!-- <script src="/static/js/homepage.jsx" type="text/jsx"></script> -->
+{% endblock %}

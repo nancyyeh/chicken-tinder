@@ -1,0 +1,128 @@
+"""CRUD operations."""
+
+from model import db, Search, User, Like, Business, SearchBusiness, connect_to_db
+import requests
+import os
+import json
+import server
+import model
+import uuid
+
+# insert API key for testing
+API_KEY = os.environ['YELP_KEY']
+
+# create date base
+os.system('dropdb chicken_tinder')
+os.system('createdb chicken_tinder')
+
+model.connect_to_db(server.app)
+model.db.create_all()
+
+
+def create_search(num_search=20, price_range=None):
+    """creata a search."""
+
+    uuid_num = uuid.uuid4()
+
+    search = Search(uuid=uuid_num, num_search=num_search,
+                    price_range=price_range)
+    db.session.add(search)
+    db.session.commit()
+
+    return search
+
+
+def create_business(yelp_id, yelp_alias):
+    """creata a business with yelp details."""
+
+    business = Business(yelp_id=yelp_id, yelp_alias=yelp_alias)
+    db.session.add(business)
+    db.session.commit()
+
+    return business
+
+
+def create_user(name, search_id):
+    """creata a user."""
+
+    user = User(name=name, search_id=search_id)
+    db.session.add(user)
+    db.session.commit()
+
+    return user
+
+
+def create_search_business(search_id, business_id):
+    """creata a search_business connection."""
+
+    search_business = SearchBusiness(
+        search_id=search_id, business_id=business_id)
+    db.session.add(search_business)
+    db.session.commit()
+
+    return search_business
+
+
+def get_business_by_yelp_id(yelp_id):
+    """get business with yelp id."""
+
+    return Business.query.filter(Business.yelp_id == yelp_id).first()
+
+
+def get_search_id_from_uuid(uuid):
+    """get business with yelp id."""
+
+    search = Search.query.filter_by(uuid=uuid).first()
+
+    return search.id
+
+
+def get_businesslist_search_id(search_id):
+    "get all businesses with search id"
+
+    bus_list_by_id = SearchBusiness.query.filter_by(search_id=search_id).all()
+
+    bus_list_obj = []
+
+    for business in bus_list_by_id:
+        bus = Business.query.get(business.business_id)
+        bus_list_obj.append(bus)
+
+    return bus_list_obj
+
+
+def search_yelp(term, location, num_search=20, price_range=None):
+    """Search yelp with the params, 
+    creaste search, goes throup API, 
+    create business if not exist, 
+    create connection bewteen search & business"""
+
+    # CREATE A Search
+    search = create_search(num_search, price_range)
+
+    # YELP API to gather business list and store into businesses database
+    url = "https://api.yelp.com/v3/businesses/search"
+    payload = {'term': term, 'location': location, 'limit': num_search, }
+    key = f"Bearer {API_KEY}"
+
+    req = requests.get(url, headers={
+                       'Authorization': key}, params=payload)
+
+    business_results = req.json()
+
+    for business in business_results['businesses']:
+        # if yelp.id is not in database create / then create connection
+        if get_business_by_yelp_id(business['id']):
+            business = get_business_by_yelp_id(business['id'])
+        else:
+            # create business in business database
+            business = create_business(business['id'], business['alias'])
+        # create connection between search.id and business.id  in searach_business database
+        create_search_business(search.id, business.id)
+
+    return search.uuid
+
+
+if __name__ == '__main__':
+    from server import app
+    connect_to_db(app)

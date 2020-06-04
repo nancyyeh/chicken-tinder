@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} 
+{% block body %}
+
+  <h1>Welcome!</h1>
+
+  <div id="search">
+    <h2>Search</h2>
+
+    <form action="/search" method="POST">
+      <p>Find <input type="text" name="find" />//optional</p>
+
+      <p>Near <input type="text" name="near" />//required</p>
+
+      <p>
+        Number
+        <input type="radio" name="max-business" value="5" /> 5
+        <input type="radio" name="max-business" value="10" /> 10
+        <input type="radio" name="max-business" value="15" /> 15
+        <input type="radio" name="max-business" value="20" /> 20 // default 20
+      </p>
+
+      <!-- <p>
+        Sort
+        <input type="radio" name="sort-by" value="best_match" /> Best Match
+        <input type="radio" name="sort-by" value="rating" /> Rating
+        <input type="radio" name="sort-by" value="review_count" /> Review Count
+        <input type="radio" name="sort-by" value="distance" /> Distance //optional
+        - default best match
+      </p>
+
+      <p>
+        Price Range <input type="radio" name="price" value="1" /> $
+        <input type="radio" name="price" value="2" /> $$
+        <input type="radio" name="price" value="3" /> $$$
+        <input type="radio" name="price" value="4" /> $$$$ //optional
+      </p>
+
+      <p>
+        Open Now <input type="radio" name="price" value="True" /> Yes
+        <input type="radio" name="price" value="False" /> No //optional true or
+        false
+      </p> -->
+
+      <p><button type="submit">Search</button></p>
+    </form>
+  </div>
+
+{% endblock %} 
+
+{% block js %}
+<!-- <script src="/static/js/homepage.jsx" type="text/jsx"></script> -->
+{% endblock %}
