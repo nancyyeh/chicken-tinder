@@ -63,10 +63,25 @@ def create_search_business(search_id, business_id):
     return search_business
 
 
+def create_likes(user_id, business_id, liking):
+    """liking a business"""
+
+    likes = Like(user_id=user_id, business_id=business_id, liking=liking)
+    db.session.add(likes)
+    db.session.commit()
+
+    return likes
+
+
 def get_business_by_yelp_id(yelp_id):
     """get business with yelp id."""
 
     return Business.query.filter(Business.yelp_id == yelp_id).first()
+
+
+def get_business_by_business_id(business_id):
+
+    return Business.query.get(business_id)
 
 
 def get_search_id_from_uuid(uuid):
@@ -78,7 +93,7 @@ def get_search_id_from_uuid(uuid):
 
 
 def get_businesslist_search_id(search_id):
-    "get all businesses with search id"
+    """get all businesses with search id"""
 
     bus_list_by_id = SearchBusiness.query.filter_by(search_id=search_id).all()
 
@@ -121,6 +136,39 @@ def search_yelp(term, location, num_search=20, price_range=None):
         create_search_business(search.id, business.id)
 
     return search.uuid
+
+
+def count_completes(search_id):
+
+    user_list = User.query.filter_by(search_id=search_id).all()
+
+    completes = 0
+
+    for user in user_list:
+        is_complete = len(user.likes) > 0
+        if is_complete == True:
+            completes += 1
+
+    return completes
+
+
+def return_matches(search_id):
+    """return a list of matched resturants from users"""
+
+    likes_users = db.session.query(Like, User).join(
+        User).filter_by(search_id=search_id).all()
+
+    dict_business_likes = {}
+
+    for like in likes_users:
+        business_id = like.Like.business_id
+        liking = like.Like.liking
+        if business_id not in dict_business_likes:
+            dict_business_likes[business_id] = 0
+        if liking == True:
+            dict_business_likes[business_id] += 1
+
+    return dict_business_likes
 
 
 if __name__ == '__main__':

@@ -4,18 +4,17 @@
   <h1>Like the resturants!</h1>
 
   <div id="resturant-widgets">
+    <form action=/room/{{ uuid }}/show method="POST">
     {% for business in list_business %}
       <p>
-        <form method="POST">
           <legend>{{ business.yelp_alias }}</legend>
-            <label><input type="radio" name="liked" value="True"> Liked</label>
-            <label><input type="radio" name="liked" value="False"> No</label>
+            <label><input type="radio" name={{business.id}} value="True"> Liked</label>
+            <label><input type="radio" name={{business.id}} value="False"> No</label>
           </fieldset>
-        </form>
       </p>
     {% endfor %}
     <p><button type="submit">DONE</button></p>
-
+  </form>
   </div>
 
 {% endblock %} 

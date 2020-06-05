@@ -1,10 +1,14 @@
 {% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} 
 {% block body %}
 
-  <h1>Like the resturants!</h1>
-
-  <div id="resturant widgets">
-    Display resturants
+  <h1>Show results!</h1>
+  <h2>Matching Resturants</h2>
+  <div>
+    {% for business in matches_business_info %}
+    <p>
+        <li>{{ business.yelp_alias }}</li>
+    </p>
+  {% endfor %}
 
   </div>
 

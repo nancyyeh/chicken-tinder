@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} 
+{% block body %}
+
+  <h1>Show results!</h1>
+
+  <div>
+    <p>{{num_completes}} people completed</p>
+    <p><button form action="/room/{{ uuid }}/show_results" type="submit">Click to show results</button></p>
+  </div>
+
+{% endblock %} 
+
+{% block js %}
+<!-- <script src="/static/js/homepage.jsx" type="text/jsx"></script> -->
+{% endblock %}

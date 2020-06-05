@@ -52,18 +52,63 @@ def room(uuid):
 
     return render_template('room.html', uuid=uuid)
 
-@app.route('/room/<uuid>', methods=['POST'])
-def create_user(uuid):
+@app.route('/room/<uuid>/liking', methods=['POST'])
+def show_businesses(uuid):
     name = request.form.get("name")
-    uuid = request.form.get("room-id")
+    # uuid = request.form.get("room-id")
     search_id = crud.get_search_id_from_uuid(uuid)
 
     user = crud.create_user(name, search_id)
-
+    
     list_business = crud.get_businesslist_search_id(search_id)
+    session['user_id'] = user.id
 
-    return render_template('like.html', list_business=list_business)
+    return render_template('like.html', list_business=list_business, uuid=uuid)
 
+# TO DO - GET LIKE FOR EACH BUSINESS STORE IN DATABASE#
+@app.route('/room/<uuid>/show', methods=['POST'])
+def get_likes(uuid):
+
+    search_id = crud.get_search_id_from_uuid(uuid)
+    list_business = crud.get_businesslist_search_id(search_id)
+    user_id = session['user_id']
+
+    #like all the businesses
+    for business in list_business:
+        liked_str = request.form.get(str(business.id))
+        if liked_str == "True":
+            liked = True
+        else:
+            liked = False
+        crud.create_likes(user_id, business.id, liked)
+    
+    num_completes = crud.count_completes(search_id)    
+
+    return render_template('show_completes.html', uuid=uuid, num_completes=num_completes)
+
+@app.route('/room/<uuid>/show_results')
+def results(uuid):
+
+    search_id = crud.get_search_id_from_uuid(uuid)
+
+    num_completes = crud.count_completes(search_id)
+    dict_business_likes = crud.return_matches(search_id)
+
+    #create a list that match return business id of matches
+    matches = []
+
+    for business, likes in dict_business_likes.items():
+        if likes == num_completes:
+            matches.append(business)
+
+    #return business info on matches
+    matches_business_info = []
+
+    for business in matches:
+        bus_info = crud.get_business_by_business_id(business)
+        matches_business_info.append(bus_info)
+
+    return render_template('results.html', uuid=uuid, matches_business_info=matches_business_info)
 
 if __name__ == '__main__':
     connect_to_db(app)

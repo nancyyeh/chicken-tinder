@@ -68,7 +68,7 @@ class Like(db.Model):
     __tablename__ = 'likes'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
-    bussiness_id = db.Column(db.Integer, db.ForeignKey('businesses.id'))
+    business_id = db.Column(db.Integer, db.ForeignKey('businesses.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     liking = db.Column(db.Boolean)
 
