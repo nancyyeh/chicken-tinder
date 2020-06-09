@@ -1,23 +1,32 @@
-{% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} 
-{% block body %}
+{% extends 'base.html' %} {% block title %}Chicken Tinder{% endblock %} {% block
+body %}
 
-  <h1>Welcome!</h1>
+<h1>Welcome!</h1>
 
-  <div id="search">
-    <h2>Search</h2>
+<div id="search">
+  <h2>Search</h2>
 
-    <form action="/search" method="POST">
-      <p>Find <input type="text" name="find" />//optional</p>
+  <form action="/search" method="POST">
+    <!-- text box find -->
+    <div class="form-group">
+      <label for="find">Find // optional</label>
+      <input type="text" class="form-control" name="find" required>
+    </div>
 
-      <p>Near <input type="text" name="near" />//required</p>
+    <!-- text box near -->
+    <div class="form-group">
+      <label for="find">Near // required</label>
+      <input type="text" class="form-control" name="near" required>
+    </div>
 
-      <p>
+
+    <div class="form-group">
         Number
         <input type="radio" name="max-business" value="5" /> 5
         <input type="radio" name="max-business" value="10" /> 10
         <input type="radio" name="max-business" value="15" /> 15
         <input type="radio" name="max-business" value="20" /> 20 // default 20
-      </p>
+    </div>
 
       <!-- <p>
         Sort
@@ -41,12 +50,13 @@
         false
       </p> -->
 
-      <p><button type="submit">Search</button></p>
-    </form>
-  </div>
+      <div class="submit-button">
+        <button type="submit" class="btn btn-primary">Search</button></p>
+      </div>
+    </div>
+  </form>
+</div>
 
-{% endblock %} 
-
-{% block js %}
+{% endblock %} {% block js %}
 <!-- <script src="/static/js/homepage.jsx" type="text/jsx"></script> -->
 {% endblock %}

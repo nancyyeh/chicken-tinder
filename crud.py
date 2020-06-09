@@ -32,10 +32,10 @@ def create_search(num_search=20, price_range=None):
     return search
 
 
-def create_business(yelp_id, yelp_alias):
+def create_business(yelp_id, yelp_alias, name, image_url, url, review_count, rating, price):
     """creata a business with yelp details."""
 
-    business = Business(yelp_id=yelp_id, yelp_alias=yelp_alias)
+    business = Business(yelp_id=yelp_id, yelp_alias=yelp_alias, name=name, image_url=image_url, url=url, review_count=review_count, rating=rating, price=price)
     db.session.add(business)
     db.session.commit()
 
@@ -131,7 +131,9 @@ def search_yelp(term, location, num_search=20, price_range=None):
             business = get_business_by_yelp_id(business['id'])
         else:
             # create business in business database
-            business = create_business(business['id'], business['alias'])
+            business = create_business(business['id'], business['alias'], business['name'],
+                                       business['image_url'], business['url'], business['review_count'],
+                                       business['rating'], business.get('price'), )
         # create connection between search.id and business.id  in searach_business database
         create_search_business(search.id, business.id)
 

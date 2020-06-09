@@ -1,10 +1,11 @@
 """Server for chicken tinder app."""
 
 from flask import (Flask, render_template, request,
-                   flash, session, redirect)
+                   flash, session, redirect, jsonify)
 from model import connect_to_db
 import model
-import crud  # comment out if just testing crud | there is a circulate dependency
+import crud 
+# comment out if just testing crud | there is a circulate dependency
 import os
 import requests
 
@@ -52,7 +53,7 @@ def room(uuid):
 
     return render_template('room.html', uuid=uuid)
 
-@app.route('/room/<uuid>/liking', methods=['POST'])
+@app.route('/liking/<uuid>', methods=['POST'])
 def show_businesses(uuid):
     name = request.form.get("name")
     # uuid = request.form.get("room-id")
@@ -66,7 +67,7 @@ def show_businesses(uuid):
     return render_template('like.html', list_business=list_business, uuid=uuid)
 
 # TO DO - GET LIKE FOR EACH BUSINESS STORE IN DATABASE#
-@app.route('/room/<uuid>/show', methods=['POST'])
+@app.route('/show/<uuid>', methods=['POST'])
 def get_likes(uuid):
 
     search_id = crud.get_search_id_from_uuid(uuid)
@@ -80,14 +81,20 @@ def get_likes(uuid):
             liked = True
         else:
             liked = False
-        crud.create_likes(user_id, business.id, liked)
+        crud.create_likes(user_id, business.id, liked) 
+
+    return render_template('show_completes.html', uuid=uuid)
+
+@app.route('/api/completes/<uuid>')
+def api_completes(uuid):
+    search_id = crud.get_search_id_from_uuid(uuid)
+    num_completes = crud.count_completes(search_id) 
+
+    return str(num_completes)
     
-    num_completes = crud.count_completes(search_id)    
 
-    return render_template('show_completes.html', uuid=uuid, num_completes=num_completes)
-
-@app.route('/room/<uuid>/show_results')
-def results(uuid):
+@app.route('/api/results/<uuid>')
+def api_results(uuid):
 
     search_id = crud.get_search_id_from_uuid(uuid)
 
@@ -108,7 +115,7 @@ def results(uuid):
         bus_info = crud.get_business_by_business_id(business)
         matches_business_info.append(bus_info)
 
-    return render_template('results.html', uuid=uuid, matches_business_info=matches_business_info)
+    return jsonify(matches)
 
 if __name__ == '__main__':
     connect_to_db(app)

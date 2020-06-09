@@ -27,6 +27,12 @@ class Business(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
     yelp_id = db.Column(db.String, unique=True, nullable=False)
     yelp_alias = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
+    url = db.Column(db.String, nullable=False)
+    review_count = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return f'<Business business_id={self.id} yelp_id={self.yelp_id} yelp_alias={self.yelp_alias} >'
