@@ -34,8 +34,21 @@ class Business(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     price = db.Column(db.String, nullable=True)
 
+    def toDict(self):
+        return {
+            "id": self.id,
+            "yelp_id": self.yelp_id,
+            "yelp_alias": self.yelp_alias,
+            "name": self.name,
+            "image_url": self.image_url,
+            "url": self.url,
+            "review_count": self.review_count,
+            "rating": self.rating,
+            "price": self.price,
+        }
+
     def __repr__(self):
-        return f'<Business business_id={self.id} yelp_id={self.yelp_id} yelp_alias={self.yelp_alias} >'
+        return f'<Business business_id={self.id} yelp_id={self.yelp_id} yelp_alias={self.yelp_alias} name={self.name} image_url={self.image_url} url={self.url} review_count={self.review_count} rating={self.rating} price={self.price}>'
 
 
 class SearchBusiness(db.Model):
@@ -63,6 +76,13 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
     name = db.Column(db.String)
     search_id = db.Column(db.Integer, db.ForeignKey('searches.id'))
+
+    def toDict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "search_id": self.search_id
+        }
 
     def __repr__(self):
         return f'<User id={self.id} name={self.name} search_id={self.search_id} >'
