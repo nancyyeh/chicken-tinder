@@ -5,7 +5,7 @@ from flask import (Flask, render_template, request,
                    flash, session, redirect, jsonify)
 from model import connect_to_db
 import model
-import crud 
+import crud
 # comment out if just testing crud | there is a circulate dependency
 import os
 import requests
@@ -14,12 +14,13 @@ from jinja2 import StrictUndefined
 
 
 app = Flask(__name__)
-app.secret_key = "adev"
+app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 # This configuration option makes the Flask interactive debugger
 # more useful (you should remove this line in production though)
 app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -35,7 +36,7 @@ def search_business():
     term = data["find"]
     location = data["near"]
     max_business = data["numsearch"]
-    print( term, location, max_business)
+    print(term, location, max_business)
     # TO DO LATER
     # sort = request.form.get("sort-by")
     # price_range = request.form.get("price")
@@ -55,12 +56,11 @@ def create_user():
     data = request.json
     uuid = data["uuid"]
     name = data["name"]
-    
+
     search_id = crud.get_search_id_from_uuid(uuid)
-    
+
     user = crud.create_user(name, search_id)
     # session['user_id'] = user.id
-
 
     # print(user.toDict())
     return jsonify(user.toDict())
@@ -98,10 +98,10 @@ def create_likes(user_id):
     uuid = data["uuid"]
     business_id = data["busid"]
     love = bool(data["love"])
-    
+
     search_id = crud.get_search_id_from_uuid(uuid)
 
-    bus_liked = crud.create_likes(user_id, business_id, love) 
+    bus_liked = crud.create_likes(user_id, business_id, love)
 
     # update to create better return
     return jsonify('success')
@@ -113,7 +113,7 @@ def update_completed(user_id):
 
     user_completed = crud.update_user_completed(user_id)
 
-    print (f'UPDATE COMPLETE STATUS: {user_completed.toDict()}')
+    print(f'UPDATE COMPLETE STATUS: {user_completed.toDict()}')
     return jsonify(user_completed.toDict())
 
 
@@ -121,10 +121,10 @@ def update_completed(user_id):
 def api_completes(uuid):
     """return how many people have completed that room/uuid"""
     search_id = crud.get_search_id_from_uuid(uuid)
-    num_completes = crud.count_completes(search_id) 
+    num_completes = crud.count_completes(search_id)
 
     return jsonify(str(num_completes))
-    
+
 
 @app.route('/api/results/<uuid>', methods=['GET'])
 def api_results(uuid):
