@@ -12,7 +12,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Search} />
           <Route path="/room/:uuid" component={Room} />
-          <Route path="/like/:uuid" component={Like} />
+          <Route path="/like/:uuid/:userid" component={Like} />
           <Route path="/results/:uuid" component={Results} />
         </Switch>
       </div>

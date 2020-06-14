@@ -75,17 +75,19 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
     name = db.Column(db.String)
+    completed = db.Column(db.Boolean)
     search_id = db.Column(db.Integer, db.ForeignKey('searches.id'))
 
     def toDict(self):
         return {
             "id": self.id,
             "name": self.name,
-            "search_id": self.search_id
+            "completed": self.completed,
+            "search_id": self.search_id,
         }
 
     def __repr__(self):
-        return f'<User id={self.id} name={self.name} search_id={self.search_id} >'
+        return f'<User id={self.id} name={self.name} completed={self.completed} search_id={self.search_id} >'
 
 
 class Like(db.Model):
@@ -105,7 +107,7 @@ class Like(db.Model):
         return f'<Like id={self.id} business_id={self.business_id} user_id={self.user_id} liking={self.liking}>'
 
 
-def connect_to_db(flask_app, db_uri='postgresql:///chicken_tinder', echo=True):
+def connect_to_db(flask_app, db_uri='postgresql:///chicken_tinder', echo=False):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     flask_app.config['SQLALCHEMY_ECHO'] = echo
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

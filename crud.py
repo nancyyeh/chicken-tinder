@@ -45,11 +45,26 @@ def create_business(yelp_id, yelp_alias, name, image_url, url, review_count, rat
 def create_user(name, search_id):
     """creata a user."""
 
-    user = User(name=name, search_id=search_id)
+    user = User(name=name, completed=False, search_id=search_id)
     db.session.add(user)
     db.session.commit()
 
     return user
+
+
+def update_user_completed(user_id):
+    """update status of user completed."""
+
+    user = User.query.get(user_id)
+    user.completed = True
+    db.session.commit()
+
+    return user
+
+def get_user(user_id):
+    """get user by id"""
+
+    return User.query.get(user_id)
 
 
 def create_search_business(search_id, business_id):

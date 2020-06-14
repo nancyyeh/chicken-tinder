@@ -25,10 +25,11 @@ function Room() {
     .then((response) => response.json())
     .then(
         (result) => {
-          // alert(`id: ${result.id}, name: ${result.name}, search_id: ${result.search_id}`)
+          alert(`id: ${result.id}, name: ${result.name}, search_id: ${result.search_id}`);
+          history.push(`/like/${uuid}/${result.id}`);
         }
     );
-    history.push(`/like/${uuid}`)
+    
 
   };
 
