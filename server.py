@@ -1,5 +1,6 @@
 """Server for chicken tinder app."""
 
+
 from flask import (Flask, render_template, request,
                    flash, session, redirect, jsonify)
 from model import connect_to_db
