@@ -14,7 +14,7 @@ from jinja2 import StrictUndefined
 
 
 app = Flask(__name__)
-app.secret_key = "dev"
+app.secret_key = "adev"
 app.jinja_env.undefined = StrictUndefined
 
 # This configuration option makes the Flask interactive debugger
