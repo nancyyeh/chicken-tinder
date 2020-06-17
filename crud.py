@@ -35,7 +35,8 @@ def create_search(num_search=20, price_range=None):
 def create_business(yelp_id, yelp_alias, name, image_url, url, review_count, rating, price):
     """creata a business with yelp details."""
 
-    business = Business(yelp_id=yelp_id, yelp_alias=yelp_alias, name=name, image_url=image_url, url=url, review_count=review_count, rating=rating, price=price)
+    business = Business(yelp_id=yelp_id, yelp_alias=yelp_alias, name=name,
+                        image_url=image_url, url=url, review_count=review_count, rating=rating, price=price)
     db.session.add(business)
     db.session.commit()
 
@@ -60,6 +61,7 @@ def update_user_completed(user_id):
     db.session.commit()
 
     return user
+
 
 def get_user(user_id):
     """get user by id"""
@@ -121,7 +123,7 @@ def get_businesslist_search_id(search_id):
     return bus_list_obj
 
 
-def search_yelp(term, location, num_search=20, price_range=None):
+def search_yelp(term, location, num_search=10, price_range=None, open_now=False,):
     """Search yelp with the params, 
     creaste search, goes throup API, 
     create business if not exist, 
@@ -132,7 +134,10 @@ def search_yelp(term, location, num_search=20, price_range=None):
 
     # YELP API to gather business list and store into businesses database
     url = "https://api.yelp.com/v3/businesses/search"
-    payload = {'term': term, 'location': location, 'limit': num_search, }
+    payload = {'term': term, 'location': location,
+               'limit': num_search, 'open_now': open_now}
+    if price_range:
+        payload["price"] = ",".join(map(str, price_range))
     key = f"Bearer {API_KEY}"
 
     req = requests.get(url, headers={
@@ -186,6 +191,20 @@ def return_matches(search_id):
             dict_business_likes[business_id] += 1
 
     return dict_business_likes
+
+
+def uuid_exist(uuid):
+    search = Search.query.filter_by(uuid=uuid).first()
+    return search is not None
+
+
+def user_exist(name, search_id):
+    users = User.query.filter_by(search_id=search_id).all()
+    # TO DO come back to do it in query
+    for user in users:
+        if name.lower() in user.name.lower():
+            return True
+    return False
 
 
 if __name__ == '__main__':

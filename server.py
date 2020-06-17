@@ -4,7 +4,7 @@ from flask import (Flask, render_template, request,
                    flash, session, redirect, jsonify)
 from model import connect_to_db
 import model
-import crud 
+import crud
 # comment out if just testing crud | there is a circulate dependency
 import os
 import requests
@@ -20,6 +20,7 @@ app.jinja_env.undefined = StrictUndefined
 # more useful (you should remove this line in production though)
 app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True
 
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def show_app(path):
@@ -34,16 +35,17 @@ def search_business():
     term = data["find"]
     location = data["near"]
     max_business = data["numsearch"]
-    print( term, location, max_business)
+    price_range = data["pricerange"]
+    open_now = data["isopennow"]
+    print(term, location, max_business, price_range, open_now)
     # TO DO LATER
     # sort = request.form.get("sort-by")
-    # price_range = request.form.get("price")
-    # open_now = request.form.get("open-now")
 
     if max_business is None:
-        max_business = 20
+        max_business = 10
 
-    search = crud.search_yelp(term, location, max_business)
+    search = crud.search_yelp(
+        term, location, max_business, price_range, open_now)
 
     return jsonify(search)
 
@@ -54,15 +56,16 @@ def create_user():
     data = request.json
     uuid = data["uuid"]
     name = data["name"]
-    
-    search_id = crud.get_search_id_from_uuid(uuid)
-    
-    user = crud.create_user(name, search_id)
-    # session['user_id'] = user.id
 
-
-    # print(user.toDict())
-    return jsonify(user.toDict())
+    if crud.uuid_exist(uuid):
+        search_id = crud.get_search_id_from_uuid(uuid)
+        if crud.user_exist(name, search_id):
+            return jsonify('User already exist, please pick a different name.'), 400
+        else:
+            user = crud.create_user(name, search_id)
+            return jsonify(user.toDict())
+    else:
+        return jsonify('Invalid room code, please enter a valid room code.'), 400
 
 
 @app.route('/api/bus/<uuid>', methods=['GET'])
@@ -75,8 +78,6 @@ def return_businesses(uuid):
 
     for bus in list_business_obj:
         list_business_dict.append(bus.toDict())
-
-    # print(list_business_dict)
 
     return jsonify(list_business_dict)
 
@@ -97,12 +98,12 @@ def create_likes(user_id):
     uuid = data["uuid"]
     business_id = data["busid"]
     love = bool(data["love"])
-    
+
     search_id = crud.get_search_id_from_uuid(uuid)
 
-    bus_liked = crud.create_likes(user_id, business_id, love) 
+    bus_liked = crud.create_likes(user_id, business_id, love)
 
-    # update to create better return
+    # TO DO update to create better return
     return jsonify('success')
 
 
@@ -112,7 +113,7 @@ def update_completed(user_id):
 
     user_completed = crud.update_user_completed(user_id)
 
-    print (f'UPDATE COMPLETE STATUS: {user_completed.toDict()}')
+    print(f'UPDATE COMPLETE STATUS: {user_completed.toDict()}')
     return jsonify(user_completed.toDict())
 
 
@@ -120,10 +121,10 @@ def update_completed(user_id):
 def api_completes(uuid):
     """return how many people have completed that room/uuid"""
     search_id = crud.get_search_id_from_uuid(uuid)
-    num_completes = crud.count_completes(search_id) 
+    num_completes = crud.count_completes(search_id)
 
     return jsonify(str(num_completes))
-    
+
 
 @app.route('/api/results/<uuid>', methods=['GET'])
 def api_results(uuid):

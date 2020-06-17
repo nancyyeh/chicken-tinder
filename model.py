@@ -13,7 +13,7 @@ class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
     uuid = db.Column(db.String, nullable=False)
     num_search = db.Column(db.Integer, nullable=False)
-    price_range = db.Column(db.Integer, nullable=True)
+    price_range = db.Column(db.ARRAY(db.Integer), nullable=True)
 
     def __repr__(self):
         return f'<Search search_id={self.id} uuid={self.uuid} num_search={self.num_search} price_range={self.price_range}>'

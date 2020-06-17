@@ -2,7 +2,7 @@ const useState = React.useState;
 const useEffect = React.useEffect;
 
 function Results() {
-  let { uuid } = useParams();
+  const { uuid } = useParams();
   const [error, setError] = useState(null);
 
   const [results, setResults] = useState({});
@@ -28,7 +28,7 @@ function Results() {
       });
   };
 
-  //LOAD BUSINESSES DATA to be render match business
+  //load business data to be render match business
   useEffect(() => {
     const url = "/api/bus/" + uuid;
     fetch(url, {
@@ -50,10 +50,9 @@ function Results() {
       .then((res) => {
         setShowResults(true);
         setResults(res);
-        // console.log(results);
         const matchedListBusId = [];
         for (let [key, value] of Object.entries(res)) {
-          if (value == completes) {
+          if (value === completes) {
             matchedListBusId.push(key);
           }
         }
@@ -88,14 +87,13 @@ function Results() {
         </button>
       </div>
 
-      {showResults ? (
+      {showResults && (
         <div>
           It's a match!
           <div id="winnings">
             {matchedBusinesses.map((businessKey) => {
               return busData.map((business) => {
-                const id = business.id;
-                if (id == businessKey) {
+                if (business.id === businessKey) {
                   return (
                     <div key={business.id} className="card2">
                       <h3>{business.name}</h3>
@@ -110,8 +108,6 @@ function Results() {
             })}
           </div>
         </div>
-      ) : (
-        ""
       )}
     </div>
   );

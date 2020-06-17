@@ -5,33 +5,30 @@ const Router = window.ReactRouterDOM.BrowserRouter;
 const Redirect = window.ReactRouterDOM.Redirect;
 
 function Like() {
-  let { uuid, userid } = useParams();
-  const [error, setError] = useState(null);
+  const { uuid, userid } = useParams();
 
   const [busData, setBusData] = useState([]);
   const [isCardsLoaded, setIsCardsLoaded] = useState(false);
-  const [cardsCompleted, setCardsCompleted] = useState({});
-  const [userCompleted, setUserCompleted] = useState(false);
+  const [completedCards, setCompletedCards] = useState({});
+  const [isUserCompleted, setIsUserCompleted] = useState(false);
 
-  //LOAD BUSINESSES DATA to be render to cards
+  //load business data to be render to cards
   useEffect(() => {
     const url = "/api/bus/" + uuid;
-    // const x = JSON.stringify(data)
-    // alert(`Submitted ${x}`);
     fetch(url, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((result) => {
         setBusData(result);
-        const cardsCompleted = {};
-        result.map((bus) => (cardsCompleted[bus.id] = false));
-        setCardsCompleted(cardsCompleted);
+        const returnedCompletedCards = {};
+        result.map((bus) => (returnedCompletedCards[bus.id] = false));
+        setCompletedCards(returnedCompletedCards);
         setIsCardsLoaded(true);
       });
   }, [uuid]);
 
-  //LOAD USER
+  //load user data - check if they have completed or not
   useEffect(() => {
     fetch(`/api/user/${userid}`, {
       method: "GET",
@@ -39,25 +36,18 @@ function Like() {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setUserCompleted(result.completed);
-        // console.log(`user completed: ${userCompleted}`);
+        setIsUserCompleted(result.completed);
       });
   }, []);
 
   useEffect(
     function checkCompleted() {
       // if completed all cards  & show results
-      const isAllTrue = (value) => value == true;
-      const allCardsCompletedValues = Object.values(cardsCompleted);
-
-      console.log(
-        `cardloaded:${isCardsLoaded} & allcardscompleted: ${allCardsCompletedValues.every(
-          isAllTrue
-        )}`
-      );
+      const isAllTrue = (value) => value === true;
+      const allCardsCompletedValues = Object.values(completedCards);
 
       if (isCardsLoaded && allCardsCompletedValues.every(isAllTrue)) {
-        setUserCompleted(true);
+        setIsUserCompleted(true);
         fetch(`/api/user_completed/${userid}`, {
           method: "POST",
         })
@@ -67,113 +57,95 @@ function Like() {
           });
       }
     },
-    [cardsCompleted]
+    [completedCards]
   );
 
   //function of click Love
-  const handleLove = (businessId) => {
+  const handleLove = (busid) => {
     return (event) => {
       const newCardsCompleted = {
-        ...cardsCompleted,
+        ...completedCards,
       };
-      newCardsCompleted[businessId] = true;
-      setCardsCompleted(newCardsCompleted);
-
+      setCompletedCards({ ...newCardsCompleted, busid: true });
       console.log(newCardsCompleted);
 
-      const data = { uuid: uuid, busid: businessId, love: true };
+      const data = { uuid, busid, love: true };
       fetch(`/api/createlove/${userid}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          // alert(result)
-        });
+      });
     };
   };
 
   //function of click No
-  const handleNope = (businessId) => {
+  const handleNope = (busid) => {
     return (event) => {
-      const newCardsCompleted = {
-        ...cardsCompleted,
-      };
-      newCardsCompleted[businessId] = true;
-      setCardsCompleted(newCardsCompleted);
-
+      setCompletedCards({ ...completedCards, busid: true });
       console.log(newCardsCompleted);
 
-      const data = { uuid: uuid, busid: businessId, love: false };
+      const data = { uuid, busid, love: true };
       fetch(`/api/createlove/${userid}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          // alert(result)
-        });
+      });
     };
   };
 
-  // RENDER
-  if (userCompleted) {
-    // alert(`User ${userCompleted}`)
-    return <Redirect to={`/results/${uuid}`} />;
-  } else {
-    return (
-      <div>
-        <h1>Like the resturants</h1>
+  // Rending section
+  return isUserCompleted ? (
+    <Redirect to={`/results/${uuid}`} />
+  ) : (
+    <div>
+      <h1>Like the resturants</h1>
 
-        <div id="resturant-widgets">
-          {busData.map((business) => {
-            const id = business.id;
-            if (!cardsCompleted[id]) {
-              return (
-                <div key={business.id} className="card2">
-                  <h3>{business.name}</h3>
-                  <img src={business.image_url} height="150" />
-                  <p>Review Count: {business.review_count}</p>
-                  <p>Rating: {business.rating}</p>
-                  <p>Price: {business.price}</p>
+      <div id="resturant-widgets">
+        {busData.map((business) => {
+          const id = business.id;
+          if (!completedCards[id]) {
+            return (
+              <div key={business.id} className="card2">
+                <h3>{business.name}</h3>
+                <img src={business.image_url} height="150" />
+                <p>Review Count: {business.review_count}</p>
+                <p>Rating: {business.rating}</p>
+                <p>Price: {business.price}</p>
 
-                  <div className="love-nope-buttons">
-                    <button
-                      id="nope"
-                      onClick={handleNope(business.id)}
-                      value="false"
-                      name="like"
-                    >
-                      <img
-                        src="/static/img/x.svg"
-                        alt=""
-                        width="32"
-                        height="32"
-                        title="x"
-                      />
-                    </button>
-                    <button id="love" onClick={handleLove(business.id)}>
-                      <img
-                        src="/static/img/heart-fill.svg"
-                        alt=""
-                        width="32"
-                        height="32"
-                        title="love"
-                      />
-                    </button>
-                  </div>
+                <div className="love-nope-buttons">
+                  <button
+                    id="nope"
+                    onClick={handleNope(business.id)}
+                    value="false"
+                    name="like"
+                  >
+                    <img
+                      src="/static/img/x.svg"
+                      alt=""
+                      width="32"
+                      height="32"
+                      title="x"
+                    />
+                  </button>
+                  <button id="love" onClick={handleLove(business.id)}>
+                    <img
+                      src="/static/img/heart-fill.svg"
+                      alt=""
+                      width="32"
+                      height="32"
+                      title="love"
+                    />
+                  </button>
                 </div>
-              );
-            }
-          })}
-        </div>
+              </div>
+            );
+          }
+        })}
       </div>
-    );
-  }
+    </div>
+  );
 }
