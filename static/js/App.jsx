@@ -14,7 +14,7 @@ function App() {
           <Route path="/" exact component={Search} />
           <Route path="/room/:uuid" component={Room} />
           <Route path="/room" component={Room} />
-          <Route path="/like/:uuid/:userid" component={Like} />
+          <Route path="/swipe/:uuid/:userid" component={SwipeApp} />
           <Route path="/results/:uuid" component={Results} />
         </Switch>
       </div>
@@ -36,6 +36,9 @@ function Nav() {
         </Link>
         <Link style={navStyle} to="/room">
           <li>Room</li>
+        </Link>
+        <Link style={navStyle} to="/swipe">
+          <li>Swipe</li>
         </Link>
         <Link style={navStyle} to="/results">
           <li>Results</li>

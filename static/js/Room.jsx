@@ -1,5 +1,6 @@
 const useState = React.useState;
 const useEffect = React.useEffect;
+const Link = window.ReactRouterDOM.Link;
 const useParams = window.ReactRouterDOM.useParams;
 const useHistory = window.ReactRouterDOM.useHistory;
 
@@ -34,7 +35,7 @@ function Room() {
         return response.json();
       })
       .then((result) => {
-        history.push(`/like/${id}/${result.id}`);
+        history.push(`/swipe/${id}/${result.id}`);
       })
       .catch((e) => {
         setIsError(true);
@@ -63,6 +64,11 @@ function Room() {
             value={id}
             required
           />
+          {id.length === 36 && (
+            <small id="results-directly" className="form-text text-muted">
+              <Link to={`/results/${id}`}>Go to results directly</Link>
+            </small>
+          )}
         </p>
         <p>
           <label>Name</label>

@@ -3,7 +3,6 @@ const Router = window.ReactRouterDOM.BrowserRouter;
 const Route = window.ReactRouterDOM.Route;
 const Link = window.ReactRouterDOM.Link;
 const Switch = window.ReactRouterDOM.Switch;
-const Redirect = window.ReactRouterDOM.Redirect;
 
 function Search() {
   const [error, setError] = useState("");
@@ -27,8 +26,8 @@ function Search() {
     if (formData.numsearch === "") {
       formData.numsearch = "10";
     }
-    const x = JSON.stringify(formData);
-    alert(`Submitted ${x}`);
+    // const x = JSON.stringify(formData);
+    // alert(`Submitted ${x}`);
 
     fetch("/api/search", {
       method: "POST",
@@ -66,8 +65,8 @@ function Search() {
     const value = Number(target.value);
     const pricerange = [...formData.pricerange];
     const idx = pricerange.indexOf(value);
-    if (idx != -1) {
-      pricerange.splice(idx);
+    if (idx > -1) {
+      pricerange.splice(idx, 1);
     } else {
       pricerange.push(value);
     }
@@ -170,26 +169,26 @@ function Search() {
             <PriceRangeButton
               displayValue="$"
               value="1"
-              isSelected={formData.pricerange.indexOf(1) != -1}
               handlePriceRangeInput={handlePriceRangeInput}
+              isSelected={formData.pricerange.indexOf(1) != -1}
             />
             <PriceRangeButton
               displayValue="$$"
               value="2"
-              isSelected={formData.pricerange.indexOf(2) != -1}
               handlePriceRangeInput={handlePriceRangeInput}
+              isSelected={formData.pricerange.indexOf(2) != -1}
             />
             <PriceRangeButton
               displayValue="$$$"
               value="3"
-              isSelected={formData.pricerange.indexOf(3) != -1}
               handlePriceRangeInput={handlePriceRangeInput}
+              isSelected={formData.pricerange.indexOf(3) != -1}
             />
             <PriceRangeButton
               displayValue="$$$$"
               value="4"
-              isSelected={formData.pricerange.indexOf(4) != -1}
               handlePriceRangeInput={handlePriceRangeInput}
+              isSelected={formData.pricerange.indexOf(4) != -1}
             />
           </div>
 
