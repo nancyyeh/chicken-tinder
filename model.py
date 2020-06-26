@@ -34,7 +34,7 @@ class Business(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     price = db.Column(db.String, nullable=True)
 
-    def toDict(self):
+    def todict(self):
         return {
             "id": self.id,
             "yelp_id": self.yelp_id,
@@ -78,7 +78,7 @@ class User(db.Model):
     completed = db.Column(db.Boolean)
     search_id = db.Column(db.Integer, db.ForeignKey('searches.id'))
 
-    def toDict(self):
+    def todict(self):
         return {
             "id": self.id,
             "name": self.name,
@@ -103,8 +103,30 @@ class Like(db.Model):
     business = db.relationship('Business', backref='likes')
     user = db.relationship('User', backref='likes')
 
+    def todict(self):
+        return {
+            "id": self.id,
+            "bus_id": self.business_id,
+            "user_id": self.user_id,
+            "liking": self.liking,
+        }
+
     def __repr__(self):
         return f'<Like id={self.id} business_id={self.business_id} user_id={self.user_id} liking={self.liking}>'
+
+
+class ShortCode(db.Model):
+    "Short code with search id"
+
+    __tablename__ = 'shortcodes'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
+    short_code = db.Column(db.String(4), unique=True, nullable=False)
+    search_id = db.Column(db.Integer, db.ForeignKey('searches.id'))
+    date_added = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return f'<Short Code={self.id} search_id={self.search_id} short_code={self.short_code} date={self.date_added}>'
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///chicken_tinder', echo=False):

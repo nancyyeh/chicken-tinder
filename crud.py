@@ -1,12 +1,15 @@
 """CRUD operations."""
 
-from model import db, Search, User, Like, Business, SearchBusiness, connect_to_db
+from model import db, Search, User, Like, Business, SearchBusiness, connect_to_db, ShortCode
 import requests
 import os
 import json
 import server
 import model
 import uuid
+from datetime import datetime, timedelta
+from itertools import permutations
+from random import shuffle
 
 # insert API key for testing
 API_KEY = os.environ['YELP_KEY']
@@ -17,6 +20,27 @@ os.system('createdb chicken_tinder')
 
 model.connect_to_db(server.app)
 model.db.create_all()
+
+
+def create_shortcodes():
+    """create all shortcode"""
+
+    letters = "ABCDEFG"
+    lst_code = list(permutations(letters, 3))
+    shuffle(lst_code)
+    bad = {'AB', 'BC'}
+
+    for i in lst_code:
+        code_str = ''.join(i)
+        if code_str not in bad:
+            code = ShortCode(short_code=code_str)
+            db.session.add(code)
+    db.session.commit()
+
+
+# run short code function only if not created
+if ShortCode.query.count() == 0:
+    create_shortcodes()
 
 
 def create_search(num_search=20, price_range=None):
@@ -30,6 +54,18 @@ def create_search(num_search=20, price_range=None):
     db.session.commit()
 
     return search
+
+
+def add_shortcode(search_id):
+
+    short_code = ShortCode.query.filter(ShortCode.search_id == None).first()
+    if short_code == None:
+        short_code = ShortCode.query.order_by(ShortCode.date_added).first()
+    short_code.search_id = search_id
+    short_code.date_added = datetime.now()
+    db.session.commit()
+
+    return short_code
 
 
 def create_business(yelp_id, yelp_alias, name, image_url, url, review_count, rating, price):
@@ -83,8 +119,15 @@ def create_search_business(search_id, business_id):
 def create_likes(user_id, business_id, liking):
     """liking a business"""
 
-    likes = Like(user_id=user_id, business_id=business_id, liking=liking)
-    db.session.add(likes)
+    # check if busid and userid exist
+    likes = Like.query.filter(Like.user_id == user_id,
+                              Like.business_id == business_id).first()
+
+    if likes is None:
+        likes = Like(user_id=user_id, business_id=business_id, liking=liking)
+        db.session.add(likes)
+    else:
+        likes.liking = liking
     db.session.commit()
 
     return likes
@@ -102,11 +145,20 @@ def get_business_by_business_id(business_id):
 
 
 def get_search_id_from_uuid(uuid):
-    """get business with yelp id."""
+    """get search id with uui."""
 
     search = Search.query.filter_by(uuid=uuid).first()
 
     return search.id
+
+
+def get_search_id_from_shortcode(short_code):
+    """get search id with short code."""
+
+    short_code_search = ShortCode.query.filter_by(
+        short_code=short_code).first()
+
+    return short_code_search.search_id
 
 
 def get_businesslist_search_id(search_id):
@@ -123,7 +175,7 @@ def get_businesslist_search_id(search_id):
     return bus_list_obj
 
 
-def search_yelp(term, location, num_search=10, price_range=None, open_now=False,):
+def search_yelp(term, location, num_search=10, price_range=None, open_now=False, sort_by=None):
     """Search yelp with the params, 
     creaste search, goes throup API, 
     create business if not exist, 
@@ -131,13 +183,16 @@ def search_yelp(term, location, num_search=10, price_range=None, open_now=False,
 
     # CREATE A Search
     search = create_search(num_search, price_range)
+    short_code = add_shortcode(search.id)
 
     # YELP API to gather business list and store into businesses database
     url = "https://api.yelp.com/v3/businesses/search"
     payload = {'term': term, 'location': location,
-               'limit': num_search, 'open_now': open_now}
+               'limit': num_search, 'open_now': open_now, }
     if price_range:
         payload["price"] = ",".join(map(str, price_range))
+    if sort_by:
+        payload["sort_by"] = sort_by
     key = f"Bearer {API_KEY}"
 
     req = requests.get(url, headers={
@@ -157,7 +212,7 @@ def search_yelp(term, location, num_search=10, price_range=None, open_now=False,
         # create connection between search.id and business.id  in searach_business database
         create_search_business(search.id, business.id)
 
-    return search.uuid
+    return short_code.short_code
 
 
 def count_completes(search_id):
@@ -193,9 +248,17 @@ def return_matches(search_id):
     return dict_business_likes
 
 
-def uuid_exist(uuid):
-    search = Search.query.filter_by(uuid=uuid).first()
-    return search is not None
+def short_code_valid(short_code):
+    """roomid is valid within 24hours days"""
+    search_shortcode = ShortCode.query.filter_by(short_code=short_code).first()
+    now = datetime.now()
+
+    if (search_shortcode is None) or (search_shortcode.date_added is None):
+        return False
+
+    if search_shortcode.date_added >= now - timedelta(minutes=80):
+        return True
+    return False
 
 
 def user_exist(name, search_id):

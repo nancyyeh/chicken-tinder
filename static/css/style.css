@@ -1,28 +1,5 @@
 .App {
   text-align: center;
-}
-
-nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 10vh;
-  background: #0e1618;
-  color: white;
-}
-
-.nav-links {
-  width: 50%;
-  display: flex;
-  justify-content: space-around;
-  list-style: none;
-}
-
-.links {
-  list-style: none;
-}
-
-.App {
   flex-direction: column;
   justify-content: center;
   align-items: center;

@@ -5,17 +5,17 @@ const useParams = window.ReactRouterDOM.useParams;
 const useHistory = window.ReactRouterDOM.useHistory;
 
 function Room() {
-  const { uuid } = useParams();
+  const { roomid } = useParams();
   let history = useHistory();
 
   const [isError, setIsError] = useState(false);
   const [errormsg, setError] = useState(null);
-  const [id, setId] = useState(uuid);
+  const [id, setId] = useState(roomid);
   const [name, setName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = { uuid: id, name: name };
+    const data = { roomid: id, name: name };
     const x = JSON.stringify(data);
     alert(`Submitted ${x}`);
 
@@ -64,7 +64,7 @@ function Room() {
             value={id}
             required
           />
-          {id.length === 36 && (
+          {id.length === 3 && (
             <small id="results-directly" className="form-text text-muted">
               <Link to={`/results/${id}`}>Go to results directly</Link>
             </small>
@@ -83,7 +83,12 @@ function Room() {
           />
         </p>
         <p>
-          <button className="btn btn-primary" type="submit" value="submit">
+          <button
+            className="btn btn-primary"
+            type="submit"
+            value="submit"
+            disabled={id.length !== 3 || name === ""}
+          >
             Join
           </button>
         </p>

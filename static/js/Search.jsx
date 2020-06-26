@@ -7,15 +7,17 @@ const Switch = window.ReactRouterDOM.Switch;
 function Search() {
   const [error, setError] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [uuid, setUuid] = useState("");
   const [url, setUrl] = useState("");
+  const [roomid, setRoomId] = useState("");
   const [formData, setFormData] = useState({
     find: "",
     near: "",
     numsearch: "",
     pricerange: [],
     isopennow: false,
-    //TO DO LATER sortby: "",
+    latitude: "",
+    longitude: "",
+    sortby: "best_match",
   });
 
   const handleSubmit = (event) => {
@@ -26,8 +28,8 @@ function Search() {
     if (formData.numsearch === "") {
       formData.numsearch = "10";
     }
-    // const x = JSON.stringify(formData);
-    // alert(`Submitted ${x}`);
+    const x = JSON.stringify(formData);
+    alert(`Submitted ${x}`);
 
     fetch("/api/search", {
       method: "POST",
@@ -40,7 +42,7 @@ function Search() {
       .then(
         (result) => {
           setIsLoaded(true);
-          setUuid(result);
+          setRoomId(result);
           setUrl(window.location + "room/" + result);
         },
         (error) => {
@@ -101,111 +103,153 @@ function Search() {
     }
   };
 
+  const getLocation = (event) => {
+    const success = (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const data = { lat: lat, lng: lng };
+      fetch("/api/reverse_geolocation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((result) =>
+          setFormData({
+            ...formData,
+            near: result,
+            latitude: lat,
+            longitude: lng,
+          })
+        )
+        .catch((error) => console.log("error", error));
+    };
+    const error = (error) => {
+      console.log(error);
+    };
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+    } else {
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+  };
+
   return (
     <div>
       <h1>Welcome start your search</h1>
 
-      <div id="search">
+      <div className="container" id="search">
         <form onSubmit={handleSubmit}>
-          <div className="input-group mb-3">
-            <div className="input-group-prepend">
-              <span className="input-group-text" id="basic-addon1">
-                Find
-              </span>
+          <FindSec
+            handleInputChange={handleInputChange}
+            inputdata={formData.find}
+          />
+
+          <NearSec
+            handleInputChange={handleInputChange}
+            inputdata={formData.near}
+            getLocation={getLocation}
+          />
+
+          <div id="more-options">
+            <div className="d-flex align-items-start" id="more-options-button">
+              <a
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                More Options
+              </a>
             </div>
-            <input
-              type="text"
-              className="form-control"
-              name="find"
-              placeholder="resturants, takeout, delivery, chinese food"
-              onChange={handleInputChange}
-              value={formData.find}
-            />
-          </div>
 
-          <div className="input-group mb-3">
-            <div className="input-group-prepend">
-              <span className="input-group-text" id="basic-addon1">
-                Near*
-              </span>
+            <div id="collapseOne" className="collapse">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
+                    # cards
+                  </label>
+                </div>
+                <div
+                  className="btn-group btn-group-toggle"
+                  data-toggle="buttons"
+                >
+                  <NumSearchButton
+                    value="5"
+                    currentNumSearch={formData.numsearch}
+                    handleInputChange={handleInputChange}
+                  />
+                  <NumSearchButton
+                    value="10"
+                    currentNumSearch={formData.numsearch}
+                    handleInputChange={handleInputChange}
+                  />
+                  <NumSearchButton
+                    value="15"
+                    currentNumSearch={formData.numsearch}
+                    handleInputChange={handleInputChange}
+                  />
+                  <NumSearchButton
+                    value="20"
+                    currentNumSearch={formData.numsearch}
+                    handleInputChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
+                    Price Range
+                  </label>
+                </div>
+                <div
+                  className="btn-group btn-group-toggle"
+                  data-toggle="buttons"
+                  role="group"
+                >
+                  <PriceRangeButton
+                    displayValue="$"
+                    value="1"
+                    handlePriceRangeInput={handlePriceRangeInput}
+                    isSelected={formData.pricerange.indexOf(1) != -1}
+                  />
+                  <PriceRangeButton
+                    displayValue="$$"
+                    value="2"
+                    handlePriceRangeInput={handlePriceRangeInput}
+                    isSelected={formData.pricerange.indexOf(2) != -1}
+                  />
+                  <PriceRangeButton
+                    displayValue="$$$"
+                    value="3"
+                    handlePriceRangeInput={handlePriceRangeInput}
+                    isSelected={formData.pricerange.indexOf(3) != -1}
+                  />
+                  <PriceRangeButton
+                    displayValue="$$$$"
+                    value="4"
+                    handlePriceRangeInput={handlePriceRangeInput}
+                    isSelected={formData.pricerange.indexOf(4) != -1}
+                  />
+                </div>
+              </div>
+
+              <OpenNowSec handleInputChange={handleInputChange} />
+
+              <SearchBySec handleInputChange={handleInputChange} />
             </div>
-            <input
-              type="text"
-              className="form-control"
-              name="near"
-              placeholder="San Francisco"
-              onChange={handleInputChange}
-              value={formData.near}
-              required
-            />
           </div>
 
-          <div className="btn-group btn-group-toggle" data-toggle="buttons">
-            How many selections?
-            <NumSearchButton
-              value="5"
-              currentNumSearch={formData.numsearch}
-              handleInputChange={handleInputChange}
-            />
-            <NumSearchButton
-              value="10"
-              currentNumSearch={formData.numsearch}
-              handleInputChange={handleInputChange}
-            />
-            <NumSearchButton
-              value="15"
-              currentNumSearch={formData.numsearch}
-              handleInputChange={handleInputChange}
-            />
-            <NumSearchButton
-              value="20"
-              currentNumSearch={formData.numsearch}
-              handleInputChange={handleInputChange}
-            />
-          </div>
-
-          <div className="btn-group btn-group-toggle" role="group">
-            Price Range
-            <PriceRangeButton
-              displayValue="$"
-              value="1"
-              handlePriceRangeInput={handlePriceRangeInput}
-              isSelected={formData.pricerange.indexOf(1) != -1}
-            />
-            <PriceRangeButton
-              displayValue="$$"
-              value="2"
-              handlePriceRangeInput={handlePriceRangeInput}
-              isSelected={formData.pricerange.indexOf(2) != -1}
-            />
-            <PriceRangeButton
-              displayValue="$$$"
-              value="3"
-              handlePriceRangeInput={handlePriceRangeInput}
-              isSelected={formData.pricerange.indexOf(3) != -1}
-            />
-            <PriceRangeButton
-              displayValue="$$$$"
-              value="4"
-              handlePriceRangeInput={handlePriceRangeInput}
-              isSelected={formData.pricerange.indexOf(4) != -1}
-            />
-          </div>
-
-          <div className="custom-control custom-switch">
-            <input
-              name="isopennow"
-              type="checkbox"
-              className="custom-control-input"
-              id="opennow"
-              onChange={handleInputChange}
-            />
-            <label className="custom-control-label" htmlFor="opennow">
-              Open Now
-            </label>
-          </div>
-
-          <div className="submit-button">
+          <div className="submit-button mb-5">
             <button type="submit" className="btn btn-primary">
               Search
             </button>
@@ -215,8 +259,17 @@ function Search() {
 
       <div>
         {isLoaded && (
-          <div>
-            <p>
+          <div className="container" id="room-codes">
+            <div className="input-group mb-3">
+              <input
+                readOnly
+                className="form-control"
+                type="text"
+                value={roomid}
+                id="room-code"
+              />
+            </div>
+            <div className="input-group mb-3">
               <input
                 readOnly
                 className="form-control"
@@ -234,9 +287,103 @@ function Search() {
                 />{" "}
                 Share
               </button>
-            </p>
+            </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function NearSec({ handleInputChange, inputdata, getLocation }) {
+  return (
+    <div className="input-group mb-3">
+      <div className="input-group-prepend">
+        <span className="input-group-text" id="basic-addon1">
+          Near*
+        </span>
+      </div>
+      <input
+        type="text"
+        className="form-control"
+        name="near"
+        placeholder="address, neighborhood, city, or zip"
+        onChange={handleInputChange}
+        value={inputdata}
+        required
+      />
+      <button type="button" className="btn btn-secondary" onClick={getLocation}>
+        <img
+          src="/static/img/cursor-fill.svg"
+          alt=""
+          width="20"
+          height="20"
+          title="current-location"
+        />
+      </button>
+    </div>
+  );
+}
+
+function FindSec({ handleInputChange, inputdata }) {
+  return (
+    <div className="input-group mb-3">
+      <div className="input-group-prepend">
+        <span className="input-group-text" id="basic-addon1">
+          Find
+        </span>
+      </div>
+      <input
+        type="text"
+        className="form-control"
+        name="find"
+        placeholder="resturants, takeout, delivery, chinese food"
+        onChange={handleInputChange}
+        value={inputdata}
+      />
+    </div>
+  );
+}
+
+// html for Search by
+function SearchBySec({ handleInputChange }) {
+  return (
+    <div className="input-group mb-3">
+      <div className="input-group-prepend">
+        <label className="input-group-text" htmlFor="inputGroupSelect01">
+          Search by
+        </label>
+      </div>
+      <select
+        name="sortby"
+        className="form-control"
+        id="sortby"
+        onChange={handleInputChange}
+      >
+        <option value="best_match">Best Match</option>
+        <option value="rating">Rating</option>
+        <option value="review_count">Review Count</option>
+        <option value="distance">Distance</option>
+      </select>
+    </div>
+  );
+}
+
+// html for Open Now Button
+function OpenNowSec({ handleInputChange }) {
+  return (
+    <div className="input-group mb-3">
+      <div className="custom-control custom-switch">
+        <input
+          name="isopennow"
+          type="checkbox"
+          className="custom-control-input"
+          id="opennow"
+          onChange={handleInputChange}
+        />
+        <label className="custom-control-label" htmlFor="opennow">
+          Open Now
+        </label>
       </div>
     </div>
   );
@@ -266,7 +413,7 @@ function PriceRangeButton({
 function NumSearchButton({ value, currentNumSearch, handleInputChange }) {
   return (
     <label
-      className={`btn btn-outline-primary ${
+      className={`btn btn-outline-secondary ${
         currentNumSearch === value && "active"
       }`}
     >

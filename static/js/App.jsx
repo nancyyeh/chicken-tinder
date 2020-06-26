@@ -12,10 +12,10 @@ function App() {
         <Nav />
         <Switch>
           <Route path="/" exact component={Search} />
-          <Route path="/room/:uuid" component={Room} />
+          <Route path="/room/:roomid" component={Room} />
           <Route path="/room" component={Room} />
-          <Route path="/swipe/:uuid/:userid" component={SwipeApp} />
-          <Route path="/results/:uuid" component={Results} />
+          <Route path="/swipe/:roomid/:userid" component={SwipeApp} />
+          <Route path="/results/:roomid" component={Results} />
         </Switch>
       </div>
     </Router>
@@ -23,27 +23,47 @@ function App() {
 }
 
 function Nav() {
-  const navStyle = {
-    color: "white",
-  };
-
   return (
-    <nav>
-      <h3>Chicken Tinder</h3>
-      <ul className="nav-links">
-        <Link style={navStyle} to="/">
-          <li>Search</li>
-        </Link>
-        <Link style={navStyle} to="/room">
-          <li>Room</li>
-        </Link>
-        <Link style={navStyle} to="/swipe">
-          <li>Swipe</li>
-        </Link>
-        <Link style={navStyle} to="/results">
-          <li>Results</li>
-        </Link>
-      </ul>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a className="navbar-brand" href="/">
+        Chicken Tinder
+      </a>
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarText"
+        aria-controls="navbarText"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbarText">
+        <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
+          <li className="nav-item">
+            <a className="nav-link" href="/">
+              Home
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/about">
+              About
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/room">
+              Room
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/contact">
+              Contact
+            </a>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 }

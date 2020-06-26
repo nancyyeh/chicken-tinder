@@ -4,7 +4,7 @@ const useHistory = window.ReactRouterDOM.useHistory;
 
 function Results() {
   let history = useHistory();
-  const { uuid } = useParams();
+  const { roomid } = useParams();
   const [error, setError] = useState(null);
 
   const [results, setResults] = useState({});
@@ -16,24 +16,27 @@ function Results() {
 
   // function of refresh button to updated number of people completed
   const onRefresh = () => {
-    const url = "/api/completes/" + uuid;
+    const url = "/api/completes/" + roomid;
     fetch(url, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((completes) => {
         setCompletes(Number(completes));
+      })
+      .catch((e) => {
+        setError(e.message);
       });
   };
 
   // get number of people completed when page is loaded
   useEffect(() => {
     onRefresh();
-  }, [uuid]);
+  }, [roomid]);
 
   //load business data to be render match business
   useEffect(() => {
-    const url = "/api/bus/" + uuid;
+    const url = "/api/bus/" + roomid;
     fetch(url, {
       method: "GET",
     })
@@ -44,20 +47,34 @@ function Results() {
           newBusDict[bus.id] = bus;
         }
         setBusData(newBusDict);
+      })
+      .catch((e) => {
+        setError(e.message);
       });
-  }, [uuid]);
+  }, [roomid]);
+
+  const onSeconds = (sec) => {
+    if (sec > 0) {
+      setTimeout(() => setSec(sec - 1), 1000);
+    }
+    if (sec === 0 && (completes === 0 || completes == null)) {
+      history.push(`/room/${roomid}`);
+    }
+  };
 
   // set seconds
   useEffect(() => {
-    sec > 0 && setTimeout(() => setSec(sec - 1), 1000);
+    if (sec > 0) {
+      setTimeout(() => setSec(sec - 1), 1000);
+    }
     if (sec === 0 && (completes === 0 || completes == null)) {
-      history.push(`/room/${uuid}`);
+      history.push(`/room/${roomid}`);
     }
   }, [sec]);
 
   // function on show results button - show resturant names of those matched
   const onResults = () => {
-    const url = "/api/results/" + uuid;
+    const url = "/api/results/" + roomid;
     fetch(url, {
       method: "GET",
     })
@@ -81,6 +98,7 @@ function Results() {
     if (matchedBus.length === 0) {
       showResults = (
         <div id="no-matched">
+          <img src="/static/img/loudly_crying_face.gif" />
           <h5>Uh no!</h5>
           <p>
             It seems like you and your friends cannot agree on what to eat...
@@ -94,17 +112,23 @@ function Results() {
     } else {
       showResults = (
         <div id="yes-matched">
-          <h2>It's a match!</h2>
+          <h2>
+            <img src="/static/img/confetti_ball.gif" height="48px" />
+            It's a match!
+            <img src="/static/img/confetti_ball.gif" height="48px" />
+          </h2>
           Winner winner chicken dinner...
-          <div id="matched-bus">
+          <div className="row" id="matched-bus">
             {matchedBus.map((businessKey) => {
               const business = busData[businessKey];
               return (
-                <div key={businessKey} className="matched-cards">
-                  <a href={business.url} target="_blank">
-                    <img src={business.image_url} />
-                    <h4>{business.name}</h4>
-                  </a>
+                <div key={businessKey} className="col-xs-12 col-sm-6 col-md-4">
+                  <div className="matched-cards m-4">
+                    <a href={business.url} target="_blank">
+                      <img src={business.image_url} />
+                      <h6>{business.name}</h6>
+                    </a>
+                  </div>
                 </div>
               );
             })}
@@ -114,10 +138,21 @@ function Results() {
     }
   }
 
+  const redirect_error = (completes === 0 || completes === null) && (
+    <div id="invalid-roomid">
+      <div className="alert alert-warning" role="alert">
+        <h4 className="alert-heading">Uh ohhh!</h4>
+        You have entered an invalid room id or no one completed yet!
+      </div>
+      <p>You will be redirect to the room page in {sec} seconds.</p>
+      <Link to={`/room/${roomid}`}>Click here to get redirected</Link>
+    </div>
+  );
+
   /*rendering - if someone completed show how many people completed 
   and show results button, else show invalid link and redirect to room */
   return completes > 0 ? (
-    <div id="valid-uuid">
+    <div id="valid-roomid">
       <div className="num-people-completed">
         {completes} people completed
         <button
@@ -143,13 +178,6 @@ function Results() {
       {showResults}
     </div>
   ) : (
-    <div id="invalid-uuid">
-      <div className="alert alert-warning" role="alert">
-        <h4 className="alert-heading">Uh ohhh!</h4>
-        You have entered an invalid room id or no one completed yet!
-      </div>
-      <p>You will be redirect to the room page in {sec} seconds.</p>
-      <Link to={`/room/${uuid}`}>Click here to get redirected</Link>
-    </div>
+    redirect_error
   );
 }

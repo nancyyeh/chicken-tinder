@@ -9,7 +9,7 @@ const Redirect = window.ReactRouterDOM.Redirect;
 const SWIPE_WIDTH_THRESHOLD = 0.08;
 
 function SwipeApp() {
-  const { uuid, userid } = useParams();
+  const { roomid, userid } = useParams();
 
   const [busData, setBusData] = useState([]);
   const [isCardsLoaded, setIsCardsLoaded] = useState(false);
@@ -25,14 +25,14 @@ function SwipeApp() {
 
   const appElement = useRef(null);
 
-  //set elementBounds
+  //set elementBounds - do not load if user completed
   useEffect(() => {
     setElementBounds(appElement.current.getBoundingClientRect());
   }, []);
 
-  //load business data to be render to cards
+  //load business data to be render to cards - do not load if user completed
   useEffect(() => {
-    const url = "/api/bus/" + uuid;
+    const url = "/api/bus/" + roomid;
     fetch(url, {
       method: "GET",
     })
@@ -41,7 +41,7 @@ function SwipeApp() {
         setBusData(result);
         setIsCardsLoaded(true);
       });
-  }, [uuid]);
+  }, [roomid]);
 
   //load user data - check if they have completed or not
   useEffect(() => {
@@ -64,7 +64,8 @@ function SwipeApp() {
           method: "POST",
         })
           .then((response) => response.json())
-          .then((result) => {});
+          .then((result) => {})
+          .catch((error) => console.log("Error sharing", error));
       }
     },
     [busData]
@@ -162,19 +163,19 @@ function SwipeApp() {
 
   //remove busData and reset the swiping records for a new card
   const dataSplice = () => {
-    setBusData(busData.splice(1));
     setDragStyle({});
     setLikeStyle({});
     setLikeSymbol("");
     setSwipeable(true);
     setDragging(false);
     setInitMousePos({});
+    setBusData(busData.splice(1));
   };
 
   //send love to server
   const handleLove = (busid) => {
-    console.log(`LOVE(Swipe right): ${uuid}, ${busid}`);
-    const data = { uuid, busid, love: true };
+    console.log(`LOVE(Swipe right): ${roomid}, ${busid}`);
+    const data = { roomid, busid, love: true };
     fetch(`/api/createlove/${userid}`, {
       method: "POST",
       headers: {
@@ -186,8 +187,8 @@ function SwipeApp() {
 
   //send nope to server
   const handleNope = (busid) => {
-    console.log(`HATE(Swipe left): ${uuid}, ${busid}`);
-    const data = { uuid, busid, love: false };
+    console.log(`HATE(Swipe left): ${roomid}, ${busid}`);
+    const data = { roomid, busid, love: false };
     fetch(`/api/createlove/${userid}`, {
       method: "POST",
       headers: {
@@ -226,7 +227,7 @@ function SwipeApp() {
     );
 
   //swiping card
-  const swipeableItem = busData.length > 0 && (
+  const swipeableItem = busData.length > 0 && isUserCompleted === false && (
     <div
       onMouseMove={mouseMove}
       onMouseDown={mouseDown}
@@ -276,7 +277,7 @@ function SwipeApp() {
   //rendering
   return isUserCompleted ? (
     <div id="completed">
-      <Redirect to={`/results/${uuid}`} />
+      <Redirect to={`/results/${roomid}`} />
     </div>
   ) : (
     <div id="not-completed">
