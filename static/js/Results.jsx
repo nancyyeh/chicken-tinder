@@ -53,22 +53,13 @@ function Results() {
       });
   }, [roomid]);
 
-  const onSeconds = (sec) => {
-    if (sec > 0) {
-      setTimeout(() => setSec(sec - 1), 1000);
-    }
-    if (sec === 0 && (completes === 0 || completes == null)) {
-      history.push(`/room/${roomid}`);
-    }
-  };
-
   // set seconds
   useEffect(() => {
     if (sec > 0) {
       setTimeout(() => setSec(sec - 1), 1000);
     }
     if (sec === 0 && (completes === 0 || completes == null)) {
-      history.push(`/room/${roomid}`);
+      history.push("/room/");
     }
   }, [sec]);
 
@@ -145,7 +136,7 @@ function Results() {
         You have entered an invalid room id or no one completed yet!
       </div>
       <p>You will be redirect to the room page in {sec} seconds.</p>
-      <Link to={`/room/${roomid}`}>Click here to get redirected</Link>
+      <Link to={"/room/"}>Click here to get redirected</Link>
     </div>
   );
 

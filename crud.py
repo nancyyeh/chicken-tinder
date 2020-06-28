@@ -25,10 +25,16 @@ model.db.create_all()
 def create_shortcodes():
     """create all shortcode"""
 
-    letters = "ABCDEFG"
-    lst_code = list(permutations(letters, 3))
+    letters = "ABCDE"
+    lst_code = list(permutations(letters, 4))
     shuffle(lst_code)
-    bad = {'AB', 'BC'}
+    bad = {'ANAL', 'ANUS', 'ARSE', 'CLIT', 'COCK',
+           'CRAP', 'CUNT', 'DICK', 'DUMB', 'DYKE',
+           'FUCK', 'GOOK', 'HOMO', 'HOES', 'JERK',
+           'JISM', 'JIZZ', 'JUGS', 'KIKE', 'PAKI',
+           'PISS', 'SCUM', 'SHAG', 'SHIT', 'SLAG',
+           'SLUT', 'SPIC', 'SUCK', 'TITS', 'TURD',
+           'TWAT', 'WANK'}
 
     for i in lst_code:
         code_str = ''.join(i)

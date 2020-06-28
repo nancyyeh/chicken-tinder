@@ -140,7 +140,7 @@ function SwipeApp() {
   const swipeRight = () => {
     setDragStyle({
       ...dragStyle,
-      left: "40rem",
+      left: "25rem",
       transform: "rotate(30deg)",
       transition: "all 0.5s",
     });
@@ -152,7 +152,7 @@ function SwipeApp() {
   const swipeLeft = () => {
     setDragStyle({
       ...dragStyle,
-      left: "-40rem",
+      left: "-25rem",
       transform: "rotate(-30deg)",
       transition: "all 0.5s",
     });
@@ -206,7 +206,7 @@ function SwipeApp() {
           <div className="content-image-wrapper">
             <img
               src={busData[1].image_url}
-              className="content-image"
+              className="content-image img-thumbnail"
               draggable="false"
             />
           </div>
@@ -238,7 +238,7 @@ function SwipeApp() {
         <div className="content-image-wrapper">
           <img
             src={busData[0].image_url}
-            className="content-image"
+            className="content-image img-thumbnail"
             draggable="false"
           />
         </div>
@@ -280,20 +280,17 @@ function SwipeApp() {
       <Redirect to={`/results/${roomid}`} />
     </div>
   ) : (
-    <div id="not-completed">
-      not completed
-      <div ref={appElement} className="swipe-app">
-        <div>
-          <h1>Like the resturants</h1>
-          <div>Cards remaining: {busData.length}</div>
-        </div>
-
-        <div className="draggable-row">
-          {stationaryItem}
-          {swipeableItem}
-        </div>
-        <div className="buttons">{buttonsLoveNope}</div>
+    <div ref={appElement} className="swipe-app" id="not-completed">
+      <div>
+        <h1>Like the resturants</h1>
+        <div>Cards remaining: {busData.length}</div>
       </div>
+
+      <div className="draggable-row">
+        {stationaryItem}
+        {swipeableItem}
+      </div>
+      <div className="buttons">{buttonsLoveNope}</div>
     </div>
   );
 }

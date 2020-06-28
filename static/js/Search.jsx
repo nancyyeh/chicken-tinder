@@ -26,7 +26,7 @@ function Search() {
       formData.find = "Resturants";
     }
     if (formData.numsearch === "") {
-      formData.numsearch = "10";
+      formData.numsearch = "5";
     }
     const x = JSON.stringify(formData);
     alert(`Submitted ${x}`);
@@ -124,23 +124,34 @@ function Search() {
             longitude: lng,
           })
         )
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log("error", error);
+        });
     };
     const error = (error) => {
       console.log(error);
+      setFormData({
+        ...formData,
+        near: "",
+      });
+      alert(
+        "To use the geolocation feature, please allow your location and try again!"
+      );
     };
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
     } else {
       navigator.geolocation.getCurrentPosition(success, error);
+      setFormData({
+        ...formData,
+        near: "Loading...",
+      });
     }
   };
 
   return (
     <div>
-      <h1>Welcome start your search</h1>
-
-      <div className="container" id="search">
+      <div className="container mt-3" id="search">
         <form onSubmit={handleSubmit}>
           <FindSec
             handleInputChange={handleInputChange}
@@ -154,7 +165,10 @@ function Search() {
           />
 
           <div id="more-options">
-            <div className="d-flex align-items-start" id="more-options-button">
+            <div
+              className="d-flex align-items-start mb-2"
+              id="more-options-button"
+            >
               <a
                 data-toggle="collapse"
                 data-target="#collapseOne"
@@ -166,90 +180,22 @@ function Search() {
             </div>
 
             <div id="collapseOne" className="collapse">
-              <div className="input-group mb-3">
-                <div className="input-group-prepend">
-                  <label
-                    className="input-group-text"
-                    htmlFor="inputGroupSelect01"
-                  >
-                    # cards
-                  </label>
-                </div>
-                <div
-                  className="btn-group btn-group-toggle"
-                  data-toggle="buttons"
-                >
-                  <NumSearchButton
-                    value="5"
-                    currentNumSearch={formData.numsearch}
-                    handleInputChange={handleInputChange}
-                  />
-                  <NumSearchButton
-                    value="10"
-                    currentNumSearch={formData.numsearch}
-                    handleInputChange={handleInputChange}
-                  />
-                  <NumSearchButton
-                    value="15"
-                    currentNumSearch={formData.numsearch}
-                    handleInputChange={handleInputChange}
-                  />
-                  <NumSearchButton
-                    value="20"
-                    currentNumSearch={formData.numsearch}
-                    handleInputChange={handleInputChange}
-                  />
-                </div>
+              <div className="row mb-3">
+                <NumCardsSec handleInputChange={handleInputChange} />
+                <SearchBySec handleInputChange={handleInputChange} />
               </div>
 
-              <div className="input-group mb-3">
-                <div className="input-group-prepend">
-                  <label
-                    className="input-group-text"
-                    htmlFor="inputGroupSelect01"
-                  >
-                    Price Range
-                  </label>
-                </div>
-                <div
-                  className="btn-group btn-group-toggle"
-                  data-toggle="buttons"
-                  role="group"
-                >
-                  <PriceRangeButton
-                    displayValue="$"
-                    value="1"
-                    handlePriceRangeInput={handlePriceRangeInput}
-                    isSelected={formData.pricerange.indexOf(1) != -1}
-                  />
-                  <PriceRangeButton
-                    displayValue="$$"
-                    value="2"
-                    handlePriceRangeInput={handlePriceRangeInput}
-                    isSelected={formData.pricerange.indexOf(2) != -1}
-                  />
-                  <PriceRangeButton
-                    displayValue="$$$"
-                    value="3"
-                    handlePriceRangeInput={handlePriceRangeInput}
-                    isSelected={formData.pricerange.indexOf(3) != -1}
-                  />
-                  <PriceRangeButton
-                    displayValue="$$$$"
-                    value="4"
-                    handlePriceRangeInput={handlePriceRangeInput}
-                    isSelected={formData.pricerange.indexOf(4) != -1}
-                  />
-                </div>
+              <div className="row mb-3">
+                <PriceRangeSec
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                />
+                <OpenNowSec handleInputChange={handleInputChange} />
               </div>
-
-              <OpenNowSec handleInputChange={handleInputChange} />
-
-              <SearchBySec handleInputChange={handleInputChange} />
             </div>
           </div>
 
-          <div className="submit-button mb-5">
+          <div className="submit-button mb-3">
             <button type="submit" className="btn btn-primary">
               Search
             </button>
@@ -297,7 +243,7 @@ function Search() {
 
 function NearSec({ handleInputChange, inputdata, getLocation }) {
   return (
-    <div className="input-group mb-3">
+    <div className="input-group mb-1">
       <div className="input-group-prepend">
         <span className="input-group-text" id="basic-addon1">
           Near*
@@ -324,6 +270,42 @@ function NearSec({ handleInputChange, inputdata, getLocation }) {
     </div>
   );
 }
+function PriceRangeSec({ handlePriceRangeInput, formData }) {
+  return (
+    <div className="input-group col">
+      <div
+        className="btn-group btn-group-toggle"
+        data-toggle="buttons"
+        role="group"
+      >
+        <PriceRangeButton
+          displayValue="$"
+          value="1"
+          handlePriceRangeInput={handlePriceRangeInput}
+          isSelected={formData.pricerange.indexOf(1) != -1}
+        />
+        <PriceRangeButton
+          displayValue="$$"
+          value="2"
+          handlePriceRangeInput={handlePriceRangeInput}
+          isSelected={formData.pricerange.indexOf(2) != -1}
+        />
+        <PriceRangeButton
+          displayValue="$$$"
+          value="3"
+          handlePriceRangeInput={handlePriceRangeInput}
+          isSelected={formData.pricerange.indexOf(3) != -1}
+        />
+        <PriceRangeButton
+          displayValue="$$$$"
+          value="4"
+          handlePriceRangeInput={handlePriceRangeInput}
+          isSelected={formData.pricerange.indexOf(4) != -1}
+        />
+      </div>
+    </div>
+  );
+}
 
 function FindSec({ handleInputChange, inputdata }) {
   return (
@@ -345,10 +327,34 @@ function FindSec({ handleInputChange, inputdata }) {
   );
 }
 
+// html for Num Cards
+function NumCardsSec({ handleInputChange }) {
+  return (
+    <div className="input-group col">
+      <div className="input-group-prepend">
+        <label className="input-group-text" htmlFor="inputGroupSelect01">
+          # Cards
+        </label>
+      </div>
+      <select
+        name="numsearch"
+        className="form-control"
+        id="num"
+        onChange={handleInputChange}
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  );
+}
+
 // html for Search by
 function SearchBySec({ handleInputChange }) {
   return (
-    <div className="input-group mb-3">
+    <div className="input-group col">
       <div className="input-group-prepend">
         <label className="input-group-text" htmlFor="inputGroupSelect01">
           Search by
@@ -372,7 +378,7 @@ function SearchBySec({ handleInputChange }) {
 // html for Open Now Button
 function OpenNowSec({ handleInputChange }) {
   return (
-    <div className="input-group mb-3">
+    <div className="input-group col">
       <div className="custom-control custom-switch">
         <input
           name="isopennow"

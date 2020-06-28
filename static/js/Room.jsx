@@ -10,8 +10,14 @@ function Room() {
 
   const [isError, setIsError] = useState(false);
   const [errormsg, setError] = useState(null);
-  const [id, setId] = useState(roomid);
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (roomid) {
+      setId(roomid);
+    }
+  }, [roomid]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -52,46 +58,57 @@ function Room() {
       )}
 
       <form onSubmit={handleSubmit}>
-        <h2>Room</h2>
-        <p>
-          <label>Room ID</label>
+        <div className="m-3">
+          <div className="d-flex justify-content-between ">
+            <div className="font-weight-bold">
+              <label>Room Code </label>
+            </div>
+            <div className="font-weight-bold">{4 - id.length}</div>
+          </div>
           <input
             type="text"
             name="room-id"
             className="form-control"
-            placeholder="Enter your room code"
-            onChange={(event) => setId(event.target.value)}
+            placeholder="Enter 4-letter code"
+            onChange={(event) => setId(event.target.value.toUpperCase())}
+            maxLength="4"
             value={id}
             required
           />
-          {id.length === 3 && (
+          {id.length === 4 && (
             <small id="results-directly" className="form-text text-muted">
               <Link to={`/results/${id}`}>Go to results directly</Link>
             </small>
           )}
-        </p>
-        <p>
-          <label>Name</label>
+        </div>
+        <div className="m-3">
+          <div className="d-flex justify-content-between ">
+            <div className="font-weight-bold">
+              <label>Name </label>
+            </div>
+            <div className="font-weight-bold">{12 - name.length}</div>
+          </div>
           <input
             type="text"
             name="name"
             className="form-control"
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => setName(event.target.value.toUpperCase())}
             value={name}
+            maxLength="12"
             placeholder="Enter your name"
             required
           />
-        </p>
-        <p>
+        </div>
+        <div className="m-3">
           <button
-            className="btn btn-primary"
+            className="btn btn-primary btn-block"
             type="submit"
             value="submit"
-            disabled={id.length !== 3 || name === ""}
+            disabled={id.length !== 4 || name === ""}
           >
             Join
           </button>
-        </p>
+        </div>
       </form>
     </div>
   );

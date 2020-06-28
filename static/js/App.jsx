@@ -26,7 +26,7 @@ function Nav() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <a className="navbar-brand" href="/">
-        Chicken Tinder
+        <img src="/static/img/logo_white.png" alt="" height="30px" />
       </a>
       <button
         className="navbar-toggler"
@@ -55,11 +55,6 @@ function Nav() {
           <li className="nav-item">
             <a className="nav-link" href="/room">
               Room
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/contact">
-              Contact
             </a>
           </li>
         </ul>
