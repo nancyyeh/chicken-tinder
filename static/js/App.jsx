@@ -24,9 +24,9 @@ function App() {
 
 function Nav() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-light">
       <a className="navbar-brand" href="/">
-        <img src="/static/img/logo_white.png" alt="" height="30px" />
+        <img src="/static/img/logo_color.png" alt="" height="30px" />
       </a>
       <button
         className="navbar-toggler"
@@ -43,18 +43,8 @@ function Nav() {
       <div className="collapse navbar-collapse" id="navbarText">
         <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
           <li className="nav-item">
-            <a className="nav-link" href="/">
-              Home
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/about">
-              About
-            </a>
-          </li>
-          <li className="nav-item">
             <a className="nav-link" href="/room">
-              Room
+              <div className="room-btn">JOIN A ROOM</div>
             </a>
           </li>
         </ul>

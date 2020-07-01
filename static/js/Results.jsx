@@ -61,6 +61,9 @@ function Results() {
     if (sec === 0 && (completes === 0 || completes == null)) {
       history.push("/room/");
     }
+    return function cleanup() {
+      clearTimeout();
+    };
   }, [sec]);
 
   // function on show results button - show resturant names of those matched
@@ -88,7 +91,7 @@ function Results() {
   if (isShowResults) {
     if (matchedBus.length === 0) {
       showResults = (
-        <div id="no-matched">
+        <div className="results-sec" id="no-matched">
           <img src="/static/img/loudly_crying_face.gif" />
           <h5>Uh no!</h5>
           <p>
@@ -102,22 +105,25 @@ function Results() {
       );
     } else {
       showResults = (
-        <div id="yes-matched">
-          <h2>
+        <div className="results-sec" id="yes-matched">
+          <h2 className="text-center heading-text">It's a Match!</h2>
+          <div className="mt-3">
             <img src="/static/img/confetti_ball.gif" height="48px" />
-            It's a match!
+            <span className="text-center">Winner Winner Chicken Dinner...</span>
             <img src="/static/img/confetti_ball.gif" height="48px" />
-          </h2>
-          Winner winner chicken dinner...
+          </div>
           <div className="row" id="matched-bus">
             {matchedBus.map((businessKey) => {
               const business = busData[businessKey];
               return (
-                <div key={businessKey} className="col-xs-12 col-sm-6 col-md-4">
+                <div key={businessKey} className="col-xs-12 col-sm-6">
                   <div className="matched-cards m-4">
                     <a href={business.url} target="_blank">
-                      <img src={business.image_url} />
-                      <h6>{business.name}</h6>
+                      <div>
+                        <img src={business.image_url} />
+                        <br />
+                        <span className="text-center">{business.name}</span>
+                      </div>
                     </a>
                   </div>
                 </div>
@@ -136,7 +142,9 @@ function Results() {
         You have entered an invalid room id or no one completed yet!
       </div>
       <p>You will be redirect to the room page in {sec} seconds.</p>
-      <Link to={"/room/"}>Click here to get redirected</Link>
+      <Link to={"/room/"} onClick={clearTimeout()}>
+        <span className="pink-text"> Click here to get redirected</span>
+      </Link>
     </div>
   );
 
@@ -161,7 +169,7 @@ function Results() {
       </div>
 
       <div className="results-button">
-        <button className="btn btn-primary" onClick={onResults}>
+        <button className="btn btn-pink mb-4" onClick={onResults}>
           Show Results
         </button>
       </div>

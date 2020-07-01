@@ -31,8 +31,11 @@ class Business(db.Model):
     image_url = db.Column(db.String, nullable=False)
     url = db.Column(db.String, nullable=False)
     review_count = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
     price = db.Column(db.String, nullable=True)
+    categories = db.Column(db.String, nullable=True)
+    distance = db.Column(db.Float, nullable=True)
+    display_address = db.Column(db.String, nullable=True)
 
     def todict(self):
         return {
@@ -45,6 +48,9 @@ class Business(db.Model):
             "review_count": self.review_count,
             "rating": self.rating,
             "price": self.price,
+            "categories": self.categories,
+            "distance": self.distance,
+            "display_address": self.display_address,
         }
 
     def __repr__(self):

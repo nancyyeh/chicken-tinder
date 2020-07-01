@@ -85,7 +85,7 @@ function SwipeApp() {
       if (leftValue < 0) {
         likeWord = "x";
         likeStyle.opacity = map(leftValue, -elementBounds.width, 0, 2, 0);
-        likeStyle.background = "#cdd6dd";
+        likeStyle.background = "#7f7c8d";
       } else if (leftValue > 0) {
         likeWord = "♥";
         likeStyle.opacity = map(leftValue, 0, elementBounds.width, 0, 2);
@@ -174,7 +174,7 @@ function SwipeApp() {
 
   //send love to server
   const handleLove = (busid) => {
-    console.log(`LOVE(Swipe right): ${roomid}, ${busid}`);
+    // console.log(`LOVE(Swipe right): ${roomid}, ${busid}`);
     const data = { roomid, busid, love: true };
     fetch(`/api/createlove/${userid}`, {
       method: "POST",
@@ -187,7 +187,7 @@ function SwipeApp() {
 
   //send nope to server
   const handleNope = (busid) => {
-    console.log(`HATE(Swipe left): ${roomid}, ${busid}`);
+    //console.log(`HATE(Swipe left): ${roomid}, ${busid}`);
     const data = { roomid, busid, love: false };
     fetch(`/api/createlove/${userid}`, {
       method: "POST",
@@ -210,19 +210,41 @@ function SwipeApp() {
               draggable="false"
             />
           </div>
-          <div className="content-name">
-            <h3>{busData[1].name}</h3>
-          </div>
-          <div className="content-info">
-            <div>Review Count: {busData[1].review_count}</div>
-            <div>Rating: {busData[1].rating}</div>
-            <div>Price: {busData[1].price}</div>
+
+          <div className="container">
+            <div className="row">
+              <div className="col">
+                <span class="font-weight-bold">{busData[1].name}</span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-auto mr-auto">
+                <div
+                  className="stars"
+                  style={{ "--rating": `${busData[1].rating}` }}
+                ></div>
+                <small>{busData[1].review_count} Reviews</small>
+              </div>
+              <div className="col-auto">
+                <small>{busData[1].price}</small>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <small>{busData[1].display_address}</small>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <small>{busData[1].categories}</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     ) : (
       <div className="draggable-wrapper">
-        <div>That's all folks</div>
+        <div>That's all the cards</div>
       </div>
     );
 
@@ -242,13 +264,34 @@ function SwipeApp() {
             draggable="false"
           />
         </div>
-        <div className="content-name">
-          <h3>{busData[0].name}</h3>
-        </div>
-        <div className="content-info">
-          <div>Review Count: {busData[0].review_count}</div>
-          <div>Rating: {busData[0].rating}</div>
-          <div>Price: {busData[0].price}</div>
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <span class="font-weight-bold">{busData[0].name}</span>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-auto mr-auto">
+              <div
+                className="stars"
+                style={{ "--rating": `${busData[0].rating}` }}
+              ></div>
+              <small>{busData[0].review_count} Reviews</small>
+            </div>
+            <div className="col-auto">
+              <small>{busData[0].price}</small>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <small>{busData[0].display_address}</small>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <small>{busData[0].categories}</small>
+            </div>
+          </div>
         </div>
         <div className="like-dislike-label" style={likeStyle}>
           {likeSymbol}
@@ -282,10 +325,11 @@ function SwipeApp() {
   ) : (
     <div ref={appElement} className="swipe-app" id="not-completed">
       <div>
-        <h1>Like the resturants</h1>
-        <div>Cards remaining: {busData.length}</div>
+        <h2 className="text-center heading-text">Start Swiping</h2>
+        <div className="mt-3">
+          <p className="text-center">Cards remaining: {busData.length}</p>
+        </div>
       </div>
-
       <div className="draggable-row">
         {stationaryItem}
         {swipeableItem}

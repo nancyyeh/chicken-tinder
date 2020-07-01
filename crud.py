@@ -74,11 +74,11 @@ def add_shortcode(search_id):
     return short_code
 
 
-def create_business(yelp_id, yelp_alias, name, image_url, url, review_count, rating, price):
+def create_business(yelp_id, yelp_alias, name, image_url, url, review_count, rating, price, categories, distance, display_address):
     """creata a business with yelp details."""
 
     business = Business(yelp_id=yelp_id, yelp_alias=yelp_alias, name=name,
-                        image_url=image_url, url=url, review_count=review_count, rating=rating, price=price)
+                        image_url=image_url, url=url, review_count=review_count, rating=rating, price=price, categories=categories, distance=distance, display_address=display_address)
     db.session.add(business)
     db.session.commit()
 
@@ -194,7 +194,7 @@ def search_yelp(term, location, num_search=10, price_range=None, open_now=False,
     # YELP API to gather business list and store into businesses database
     url = "https://api.yelp.com/v3/businesses/search"
     payload = {'term': term, 'location': location,
-               'limit': num_search, 'open_now': open_now, }
+               'limit': num_search, 'open_now': open_now, 'categories': 'food'}
     if price_range:
         payload["price"] = ",".join(map(str, price_range))
     if sort_by:
@@ -211,10 +211,19 @@ def search_yelp(term, location, num_search=10, price_range=None, open_now=False,
         if get_business_by_yelp_id(business['id']):
             business = get_business_by_yelp_id(business['id'])
         else:
+            bus_categories = []
+            categories = business.get('categories')
+            for category in categories:
+                bus_categories.append(category['title'])
+            str_categories = ', '.join(bus_categories)
+            location = business['location']
+            address = ", ".join(location['display_address'])
             # create business in business database
             business = create_business(business['id'], business['alias'], business['name'],
                                        business['image_url'], business['url'], business['review_count'],
-                                       business['rating'], business.get('price'), )
+                                       business['rating'], business.get(
+                                           'price'),
+                                       str_categories, business['distance'], address)
         # create connection between search.id and business.id  in searach_business database
         create_search_business(search.id, business.id)
 

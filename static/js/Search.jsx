@@ -28,8 +28,8 @@ function Search() {
     if (formData.numsearch === "") {
       formData.numsearch = "5";
     }
-    const x = JSON.stringify(formData);
-    alert(`Submitted ${x}`);
+    // const x = JSON.stringify(formData);
+    // alert(`Submitted ${x}`);
 
     fetch("/api/search", {
       method: "POST",
@@ -84,6 +84,20 @@ function Search() {
     copyText.select();
     document.execCommand("copy");
     alert("Link into clipboard!");
+  };
+
+  const newsearch = (event) => {
+    setIsLoaded(false);
+    setFormData({
+      find: "",
+      near: "",
+      numsearch: "",
+      pricerange: [],
+      isopennow: false,
+      latitude: "",
+      longitude: "",
+      sortby: "best_match",
+    });
   };
 
   const shareLink = (event) => {
@@ -150,62 +164,26 @@ function Search() {
   };
 
   return (
-    <div>
-      <div className="container mt-3" id="search">
-        <form onSubmit={handleSubmit}>
-          <FindSec
-            handleInputChange={handleInputChange}
-            inputdata={formData.find}
-          />
-
-          <NearSec
-            handleInputChange={handleInputChange}
-            inputdata={formData.near}
-            getLocation={getLocation}
-          />
-
-          <div id="more-options">
-            <div
-              className="d-flex align-items-start mb-2"
-              id="more-options-button"
-            >
-              <a
-                data-toggle="collapse"
-                data-target="#collapseOne"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-              >
-                More Options
-              </a>
-            </div>
-
-            <div id="collapseOne" className="collapse">
-              <div className="row mb-3">
-                <NumCardsSec handleInputChange={handleInputChange} />
-                <SearchBySec handleInputChange={handleInputChange} />
-              </div>
-
-              <div className="row mb-3">
-                <PriceRangeSec
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                />
-                <OpenNowSec handleInputChange={handleInputChange} />
-              </div>
-            </div>
-          </div>
-
-          <div className="submit-button mb-3">
-            <button type="submit" className="btn btn-primary">
-              Search
-            </button>
-          </div>
-        </form>
+    <div id="create-selection">
+      <div>
+        <h2 className="text-center heading-text">Create Selection</h2>
+        <div className="mt-3">
+          <p className="text-center">
+            Hello! Are you having a hard time picking what to eat?
+            <br />
+            Enter a location, share your room code & start swiping!
+          </p>
+        </div>
       </div>
 
-      <div>
-        {isLoaded && (
-          <div className="container" id="room-codes">
+      {isLoaded ? (
+        <section id="rooms-details">
+          <div className="container mt-1 input-sec" id="room-codes">
+            <div className="d-flex justify-content-between ">
+              <div className="font-weight-bold">
+                <label>Room Code </label>
+              </div>
+            </div>
             <div className="input-group mb-3">
               <input
                 readOnly
@@ -214,6 +192,11 @@ function Search() {
                 value={roomid}
                 id="room-code"
               />
+            </div>
+            <div className="d-flex justify-content-between ">
+              <div className="font-weight-bold">
+                <label>Room Link </label>
+              </div>
             </div>
             <div className="input-group mb-3">
               <input
@@ -234,9 +217,67 @@ function Search() {
                 Share
               </button>
             </div>
+            <div className="text-center">
+              <a onClick={newsearch}>
+                <span className="pink-text">
+                  <small>Click here to start a search</small>
+                </span>
+              </a>
+            </div>
           </div>
-        )}
-      </div>
+        </section>
+      ) : (
+        <section>
+          <div className="container mt-1 input-sec" id="search">
+            <form onSubmit={handleSubmit}>
+              <FindSec
+                handleInputChange={handleInputChange}
+                inputdata={formData.find}
+              />
+
+              <NearSec
+                handleInputChange={handleInputChange}
+                inputdata={formData.near}
+                getLocation={getLocation}
+              />
+
+              <div id="more-options">
+                <div
+                  className="d-flex align-items-start mb-2 pink-text"
+                  id="more-options-button"
+                >
+                  <a
+                    data-toggle="collapse"
+                    data-target="#collapseOne"
+                    aria-expanded="true"
+                    aria-controls="collapseOne"
+                  >
+                    More Options
+                  </a>
+                </div>
+                <div id="collapseOne" className="collapse">
+                  <div className="row mb-3">
+                    <NumCardsSec handleInputChange={handleInputChange} />
+                    <SearchBySec handleInputChange={handleInputChange} />
+                  </div>
+                  <div className="row mb-3">
+                    <PriceRangeSec
+                      formData={formData}
+                      handleInputChange={handleInputChange}
+                    />
+                    <OpenNowSec handleInputChange={handleInputChange} />
+                  </div>
+                </div>
+              </div>
+              <div className="submit-button mb-3">
+                <button type="submit" className="btn btn-pink">
+                  Create Room
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
@@ -357,7 +398,7 @@ function SearchBySec({ handleInputChange }) {
     <div className="input-group col">
       <div className="input-group-prepend">
         <label className="input-group-text" htmlFor="inputGroupSelect01">
-          Search by
+          Search
         </label>
       </div>
       <select

@@ -1,3 +1,16 @@
+#root {
+  background-image: url(/static/img/placeholder.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 70vh;
+}
+
+body {
+  text-align: center;
+}
+
+/* CSS for swiping section */
 .swipe-app {
   display: inline-flex;
   flex-direction: column;
@@ -5,20 +18,19 @@
   position: relative;
   height: 100vh;
   width: 100%;
-  background: #dbf5f7;
 }
 
 .draggable-row {
   position: relative;
   width: 100%;
-  height: 50%;
+  min-height: 400px;
+  height: 60%;
 }
 
 .draggable {
   width: 100%;
   height: 100%;
   position: relative;
-  background: rgb(80, 131, 206);
   color: white;
   overflow: hidden;
 }
@@ -26,10 +38,10 @@
 .bus-card {
   display: inline-block;
   width: 80vw;
-  max-width: 300px;
+  max-width: 350px;
   min-width: 250px;
   height: 100%;
-  background: #e1e0e6;
+  background: #f0f0f0;
   padding-bottom: 40px;
   border-radius: 8px;
   overflow: hidden;
@@ -38,11 +50,12 @@
   cursor: -webkit-grab;
   cursor: -moz-grab;
   cursor: grab;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .content-image-wrapper {
   position: relative;
-  width: 300px;
+  width: 350px;
   height: 300px;
   overflow: hidden;
 }
@@ -89,6 +102,7 @@
                                   supported by Chrome and Opera */
 }
 
+/* like and dislike buttons */
 .tinder--buttons {
   flex: 0 0 100px;
   text-align: center;
@@ -100,7 +114,6 @@
   line-height: 60px;
   width: 60px;
   border: 0;
-  background: #ffffff;
   display: inline-block;
   margin: 0 8px;
 }
@@ -120,4 +133,159 @@
   width: 180px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+#create-selection {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+}
+
+#room {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+}
+
+#valid-roomid {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.results-sec {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  align-items: center;
+}
+
+.swipe-app {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+  --star-color: #7f7c8d;
+  --star-background: #fc0;
+}
+
+.heading-text::after {
+  content: "";
+  position: absolute;
+  display: block;
+  background-image: linear-gradient(to right, #ffba42, #e373c5);
+  width: 120px;
+  height: 4px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/* nav btn css */
+.room-btn {
+  border: 2px solid #ffd450;
+  border-radius: 20px;
+  padding: 8px;
+  background: #ffd45040;
+  color: #ffffff;
+}
+
+h2 {
+  color: #5f537d;
+}
+
+.stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  line-height: 1;
+}
+
+.stars::before {
+  content: "★★★★★";
+  letter-spacing: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--star-background) var(--percent),
+    var(--star-color) var(--percent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+a {
+  color: #e9478a;
+}
+
+a:hover {
+  color: #bb2966;
+}
+
+.pink-text {
+  color: #e9478a;
+}
+
+.btn-pink {
+  background-color: #e9478a;
+  border-color: #e9478a;
+  color: #ffffff;
+}
+
+.btn-pink:hover {
+  background-color: #bb2966;
+  border-color: #bb2966;
+  color: #ffffff;
+}
+
+.form-control:focus {
+  color: #495057;
+  border-color: #e373c5;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.btn-outline-primary {
+  color: #e9478a;
+  border-color: #e9478a;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #e9478a;
+  border-color: #e9478a;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #e9478a;
+  border-color: #e9478a;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+.show > .btn-outline-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  background-color: #e9478a;
+  border-color: #e9478a;
+}
+
+.custom-control-input:focus {
+  outline-color: #e9478a;
+  box-shadow: 0 0 0 0.2rem #e9478a40;
 }
