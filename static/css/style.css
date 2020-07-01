@@ -1,52 +1,315 @@
-.App {
-    text-align: center;
-  }
-  
-  nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    min-height: 10vh;
-    background: #0e1618;
-    color: white;
-  }
-  
-  .nav-links {
-    width: 50%;
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
-  }
-  
-  .links {
-    list-style: none;
-  }
+#root {
+  background-image: url(/static/img/bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 70vh;
+}
 
-  .card {
-    width: 320px;
-    height: 320px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border-radius: 1%;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    transform: translateX(-50%) translateY(-50%);
-  }
+body {
+  text-align: center;
+}
 
-  .cardx {
-    display: inline-block;
-    width: 90vw;
-    max-width: 400px;
-    height: 70vh;
-    background: #FFFFFF;
-    padding-bottom: 40px;
-    border-radius: 8px;
-    overflow: hidden;
-    position: absolute;
-    will-change: transform;
-    transition: all 0.3s ease-in-out;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
-    cursor: grab;
-  }
+/* CSS for swiping section */
+.swipe-app {
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+.draggable-row {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  height: 60%;
+}
+
+.draggable {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  color: white;
+  overflow: hidden;
+}
+
+.bus-card {
+  display: inline-block;
+  width: 80vw;
+  max-width: 350px;
+  min-width: 250px;
+  height: 100%;
+  background: #f0f0f0;
+  padding-bottom: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  will-change: transform;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.content-image-wrapper {
+  position: relative;
+  width: 350px;
+  height: 300px;
+  overflow: hidden;
+}
+
+.content-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.draggable-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  left: 0;
+  top: 0;
+}
+
+.like-dislike-label {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 6rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  pointer-events: none;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+/* like and dislike buttons */
+.tinder--buttons {
+  flex: 0 0 100px;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.tinder--buttons button {
+  border-radius: 50%;
+  line-height: 60px;
+  width: 60px;
+  border: 0;
+  display: inline-block;
+  margin: 0 8px;
+}
+
+.tinder--buttons button:focus {
+  outline: 0;
+}
+
+.tinder--buttons img {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+.matched-cards img {
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#create-selection {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: center;
+}
+
+.input-sec {
+  max-width: 500px;
+}
+
+#room {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: center;
+}
+
+#valid-roomid {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.results-sec {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  align-items: center;
+}
+
+.swipe-app {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+  --star-color: #7f7c8d;
+  --star-background: #fc0;
+}
+
+.heading-text::after {
+  content: "";
+  position: absolute;
+  display: block;
+  background-image: linear-gradient(to right, #ffba42, #e373c5);
+  width: 120px;
+  height: 4px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/* nav btn css */
+.room-btn {
+  border: 2px solid #ffd450;
+  border-radius: 20px;
+  padding: 8px;
+  background: #ffd45040;
+  color: #ffffff;
+}
+
+h2 {
+  color: #5f537d;
+  padding-bottom: 1rem;
+}
+
+.stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  line-height: 1;
+}
+
+.stars::before {
+  content: "★★★★★";
+  letter-spacing: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--star-background) var(--percent),
+    var(--star-color) var(--percent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+a {
+  color: #e9478a;
+}
+
+a:hover {
+  color: #bb2966;
+}
+
+.pink-text {
+  color: #e9478a;
+}
+
+.btn-pink {
+  background-color: #e9478a;
+  border-color: #e9478a;
+  color: #ffffff;
+}
+
+.btn-pink:hover {
+  background-color: #bb2966;
+  border-color: #bb2966;
+  color: #ffffff;
+}
+
+.form-control:focus {
+  color: #495057;
+  border-color: #e373c5;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.btn-outline-primary {
+  color: #e9478a;
+  border-color: #e9478a;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #e9478a;
+  border-color: #e9478a;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #e9478a;
+  border-color: #e9478a;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+.show > .btn-outline-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  background-color: #e9478a;
+  border-color: #e9478a;
+}
+
+.custom-control-input:focus {
+  outline-color: #e9478a;
+  box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.more-options-link::before {
+  content: "▼";
+  letter-spacing: 1px;
+}
+
+.more-options-link.collapsed::before {
+  content: "►";
+  letter-spacing: 1px;
+}
+
+.navbar {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+.results-sec {
+  max-width: 900px;
+}
