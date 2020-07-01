@@ -4,6 +4,7 @@ const Route = window.ReactRouterDOM.Route;
 const Link = window.ReactRouterDOM.Link;
 const Switch = window.ReactRouterDOM.Switch;
 const Redirect = window.ReactRouterDOM.Redirect;
+const useHistory = window.ReactRouterDOM.useHistory;
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function Nav() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <a className="navbar-brand" href="/">
-        <img src="/static/img/logo_color.png" alt="" height="30px" />
+        <img src="/static/img/logo_color.png" alt="" height="40px" />
       </a>
       <button
         className="navbar-toggler"

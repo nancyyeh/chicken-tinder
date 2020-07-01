@@ -116,7 +116,7 @@ function Results() {
             {matchedBus.map((businessKey) => {
               const business = busData[businessKey];
               return (
-                <div key={businessKey} className="col-xs-12 col-sm-6">
+                <div key={businessKey} className="col-xs-12 col-sm-6 col-md-4">
                   <div className="matched-cards m-4">
                     <a href={business.url} target="_blank">
                       <div>

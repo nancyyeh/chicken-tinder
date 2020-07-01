@@ -5,6 +5,7 @@ const Link = window.ReactRouterDOM.Link;
 const Switch = window.ReactRouterDOM.Switch;
 
 function Search() {
+  let history = useHistory();
   const [error, setError] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [url, setUrl] = useState("");
@@ -100,11 +101,17 @@ function Search() {
     });
   };
 
+  const copyLinkRedirect = (event) => {
+    copyLink();
+    history.push(`/room/${roomid}/`);
+  };
+
   const shareLink = (event) => {
     const sharedUrl = document.getElementById("link");
     const shareData = {
       title: "What should we eat?",
-      text: "Pick the resturants!",
+      text:
+        "Click on the link to pick the resturants we should eat at! Link expires in 90 mins.",
       url: sharedUrl,
     };
     if (navigator.share) {
@@ -167,32 +174,31 @@ function Search() {
     <div id="create-selection">
       <div>
         <h2 className="text-center heading-text">Create Selection</h2>
-        <div className="mt-3">
-          <p className="text-center">
-            Hello! Are you having a hard time picking what to eat?
-            <br />
-            Enter a location, share your room code & start swiping!
-          </p>
-        </div>
+        {isLoaded ? (
+          <div className="mt-3">
+            <p className="text-center">
+              Share the link with your friends!
+              <br />
+              Or ask your friends to join at{" "}
+              <a href="/room">chickentinder.me/room</a>
+              <br /> Room code:{" "}
+              <span className="font-weight-bold">{roomid}</span>
+            </p>
+          </div>
+        ) : (
+          <div className="mt-3">
+            <p className="text-center">
+              Hello! Are you having a hard time picking what to eat?
+              <br />
+              Enter a location, share your room code & start swiping!
+            </p>
+          </div>
+        )}
       </div>
 
       {isLoaded ? (
         <section id="rooms-details">
           <div className="container mt-1 input-sec" id="room-codes">
-            <div className="d-flex justify-content-between ">
-              <div className="font-weight-bold">
-                <label>Room Code </label>
-              </div>
-            </div>
-            <div className="input-group mb-3">
-              <input
-                readOnly
-                className="form-control"
-                type="text"
-                value={roomid}
-                id="room-code"
-              />
-            </div>
             <div className="d-flex justify-content-between ">
               <div className="font-weight-bold">
                 <label>Room Link </label>
@@ -215,6 +221,11 @@ function Search() {
                   title="share"
                 />{" "}
                 Share
+              </button>
+            </div>
+            <div className="copy-room-btn">
+              <button className="btn btn-pink" onClick={copyLinkRedirect}>
+                Copy Link & Join Room
               </button>
             </div>
             <div className="text-center">
@@ -251,16 +262,17 @@ function Search() {
                     data-target="#collapseOne"
                     aria-expanded="true"
                     aria-controls="collapseOne"
+                    className="more-options-link collapsed"
                   >
                     More Options
                   </a>
                 </div>
                 <div id="collapseOne" className="collapse">
-                  <div className="row mb-3">
+                  <div className="row mb-2">
                     <NumCardsSec handleInputChange={handleInputChange} />
                     <SearchBySec handleInputChange={handleInputChange} />
                   </div>
-                  <div className="row mb-3">
+                  <div className="row mb-2">
                     <PriceRangeSec
                       formData={formData}
                       handleInputChange={handleInputChange}
@@ -313,7 +325,7 @@ function NearSec({ handleInputChange, inputdata, getLocation }) {
 }
 function PriceRangeSec({ handlePriceRangeInput, formData }) {
   return (
-    <div className="input-group col">
+    <div className="input-group col-sm mb-2">
       <div
         className="btn-group btn-group-toggle"
         data-toggle="buttons"
@@ -371,7 +383,7 @@ function FindSec({ handleInputChange, inputdata }) {
 // html for Num Cards
 function NumCardsSec({ handleInputChange }) {
   return (
-    <div className="input-group col">
+    <div className="input-group col-sm mb-2">
       <div className="input-group-prepend">
         <label className="input-group-text" htmlFor="inputGroupSelect01">
           # Cards
@@ -395,7 +407,7 @@ function NumCardsSec({ handleInputChange }) {
 // html for Search by
 function SearchBySec({ handleInputChange }) {
   return (
-    <div className="input-group col">
+    <div className="input-group col-sm mb-2">
       <div className="input-group-prepend">
         <label className="input-group-text" htmlFor="inputGroupSelect01">
           Search
@@ -419,7 +431,7 @@ function SearchBySec({ handleInputChange }) {
 // html for Open Now Button
 function OpenNowSec({ handleInputChange }) {
   return (
-    <div className="input-group col">
+    <div className="input-group col-sm mb-2">
       <div className="custom-control custom-switch">
         <input
           name="isopennow"

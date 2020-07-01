@@ -1,5 +1,5 @@
 #root {
-  background-image: url(/static/img/placeholder.jpg);
+  background-image: url(/static/img/bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -140,7 +140,10 @@ body {
   flex-direction: column;
   height: 90vh;
   justify-content: center;
-  align-items: center;
+}
+
+.input-sec {
+  max-width: 500px;
 }
 
 #room {
@@ -148,7 +151,6 @@ body {
   flex-direction: column;
   height: 90vh;
   justify-content: center;
-  align-items: center;
 }
 
 #valid-roomid {
@@ -198,6 +200,7 @@ body {
 
 h2 {
   color: #5f537d;
+  padding-bottom: 1rem;
 }
 
 .stars {
@@ -288,4 +291,25 @@ a:hover {
 .custom-control-input:focus {
   outline-color: #e9478a;
   box-shadow: 0 0 0 0.2rem #e9478a40;
+}
+
+.more-options-link::before {
+  content: "▼";
+  letter-spacing: 1px;
+}
+
+.more-options-link.collapsed::before {
+  content: "►";
+  letter-spacing: 1px;
+}
+
+.navbar {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+.results-sec {
+  max-width: 900px;
 }

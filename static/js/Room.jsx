@@ -64,7 +64,7 @@ function Room() {
         </div>
       )}
       <section>
-        <div className="input-sec">
+        <div className="container mt-1 input-sec">
           <form onSubmit={handleSubmit}>
             <div className="m-3">
               <div className="d-flex justify-content-between ">
