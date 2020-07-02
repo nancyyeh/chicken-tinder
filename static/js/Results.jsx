@@ -107,28 +107,33 @@ function Results() {
       showResults = (
         <div className="results-sec" id="yes-matched">
           <h2 className="text-center heading-text">It's a Match!</h2>
-          <div className="mt-3">
+          <div className="mt-2">
             <img src="/static/img/confetti_ball.gif" height="48px" />
             <span className="text-center">Winner Winner Chicken Dinner...</span>
             <img src="/static/img/confetti_ball.gif" height="48px" />
           </div>
-          <div className="row" id="matched-bus">
-            {matchedBus.map((businessKey) => {
-              const business = busData[businessKey];
-              return (
-                <div key={businessKey} className="col-xs-12 col-sm-6 col-md-4">
-                  <div className="matched-cards m-4">
-                    <a href={business.url} target="_blank">
-                      <div>
-                        <img src={business.image_url} />
-                        <br />
-                        <span className="text-center">{business.name}</span>
-                      </div>
-                    </a>
+          <div className="container">
+            <div className="row justify-content-around" id="matched-bus">
+              {matchedBus.map((businessKey) => {
+                const business = busData[businessKey];
+                return (
+                  <div
+                    key={businessKey}
+                    className="col-sm-12 col-md-6 col-lg-4"
+                  >
+                    <div className="matched-cards m-4">
+                      <a href={business.url} target="_blank">
+                        <div>
+                          <img src={business.image_url} />
+                          <br />
+                          <span className="text-center">{business.name}</span>
+                        </div>
+                      </a>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       );
@@ -139,8 +144,9 @@ function Results() {
     <div id="invalid-roomid">
       <div className="alert alert-warning" role="alert">
         <h4 className="alert-heading">Uh ohhh!</h4>
-        You have entered an invalid room id or no one completed yet!
+        You have entered an invalid room id or no one has completed yet!
       </div>
+      <img src="/static/img/loudly_crying_face.gif" />
       <p>You will be redirect to the room page in {sec} seconds.</p>
       <Link to={"/room/"} onClick={clearTimeout()}>
         <span className="pink-text"> Click here to get redirected</span>
@@ -153,23 +159,23 @@ function Results() {
   return completes > 0 ? (
     <div id="valid-roomid">
       <div className="num-people-completed">
-        {completes} people completed
+        <span>{completes} person(s) completed </span>
         <button
-          className="btn btn-secondary btn-sm"
+          className="btn btn-secondary btn-xs"
           id="refresh"
           onClick={onRefresh}
         >
           <img
             src="/static/img/arrow-clockwise.svg"
-            width="26"
-            height="25"
+            width="24"
+            height="24"
             title="refresh"
           />
         </button>
       </div>
 
       <div className="results-button">
-        <button className="btn btn-pink mb-4" onClick={onResults}>
+        <button className="btn btn-pink my-3" onClick={onResults}>
           Show Results
         </button>
       </div>

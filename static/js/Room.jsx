@@ -52,7 +52,7 @@ function Room() {
     <div id="room">
       <div>
         <h2 className="text-center heading-text">Room</h2>
-        <div className="mt-3">
+        <div className="mt-2">
           <p className="text-center">
             Enter your 4 letter room code & your name to join a room!
           </p>
@@ -66,7 +66,7 @@ function Room() {
       <section>
         <div className="container mt-1 input-sec">
           <form onSubmit={handleSubmit}>
-            <div className="m-3">
+            <div className="m-2">
               <div className="d-flex justify-content-between ">
                 <div className="font-weight-bold">
                   <label>Room Code </label>
@@ -89,7 +89,7 @@ function Room() {
                 </small>
               )}
             </div>
-            <div className="m-3">
+            <div className="m-2">
               <div className="d-flex justify-content-between ">
                 <div className="font-weight-bold">
                   <label>Name </label>
@@ -107,7 +107,7 @@ function Room() {
                 required
               />
             </div>
-            <div className="m-3">
+            <div className="my-3 mx-2">
               <button
                 className="btn btn-pink btn-block"
                 type="submit"

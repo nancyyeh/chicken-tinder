@@ -10,14 +10,18 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Nav />
-        <Switch>
-          <Route path="/" exact component={Search} />
-          <Route path="/room/:roomid" component={Room} />
-          <Route path="/room" component={Room} />
-          <Route path="/swipe/:roomid/:userid" component={SwipeApp} />
-          <Route path="/results/:roomid" component={Results} />
-        </Switch>
+        <div className="content-wrap">
+          <Nav />
+          <Switch>
+            <Route path="/" exact component={Search} />
+            <Route path="/room/:roomid" component={Room} />
+            <Route path="/room" component={Room} />
+            <Route path="/swipe/:roomid/:userid" component={SwipeApp} />
+            <Route path="/results/:roomid" component={Results} />
+          </Switch>
+        </div>
+
+        <Footer />
       </div>
     </Router>
   );
@@ -27,7 +31,7 @@ function Nav() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <a className="navbar-brand" href="/">
-        <img src="/static/img/logo_color.png" alt="" height="40px" />
+        <img src="/static/img/logo_purple.png" alt="" height="45px" />
       </a>
       <button
         className="navbar-toggler"
@@ -51,6 +55,24 @@ function Nav() {
         </ul>
       </div>
     </nav>
+  );
+}
+
+function Footer() {
+  return (
+    <div className="footer">
+      <p>
+        <small>Made with ♥ by Nancy </small>
+        <a href="https://github.com/nancyyeh" target="_blank">
+          <img
+            src="/static/img/github.svg"
+            width="18"
+            height="18"
+            title="github"
+          />
+        </a>
+      </p>
+    </div>
   );
 }
 

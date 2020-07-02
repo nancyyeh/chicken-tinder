@@ -39,7 +39,6 @@ def search_business():
     price_range = data["pricerange"]
     open_now = data["isopennow"]
     sort_by = data["sortby"]
-    print(term, location, max_business, price_range, open_now, sort_by)
 
     if max_business is None:
         max_business = 10
@@ -112,7 +111,6 @@ def update_completed(user_id):
 
     user_completed = crud.update_user_completed(user_id)
 
-    print(f'UPDATE COMPLETE STATUS: {user_completed.todict()}')
     return jsonify(user_completed.todict())
 
 

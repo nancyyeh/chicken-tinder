@@ -326,7 +326,7 @@ function SwipeApp() {
     <div ref={appElement} className="swipe-app" id="not-completed">
       <div>
         <h2 className="text-center heading-text">Start Swiping</h2>
-        <div className="mt-3">
+        <div className="mt-1">
           <p className="text-center">Cards remaining: {busData.length}</p>
         </div>
       </div>

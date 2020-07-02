@@ -194,7 +194,7 @@ def search_yelp(term, location, num_search=10, price_range=None, open_now=False,
     # YELP API to gather business list and store into businesses database
     url = "https://api.yelp.com/v3/businesses/search"
     payload = {'term': term, 'location': location,
-               'limit': num_search, 'open_now': open_now, 'categories': 'food'}
+               'limit': num_search, 'open_now': open_now, }
     if price_range:
         payload["price"] = ",".join(map(str, price_range))
     if sort_by:

@@ -188,7 +188,7 @@ function Search() {
         ) : (
           <div className="mt-3">
             <p className="text-center">
-              Hello! Are you having a hard time picking what to eat?
+              Hello! Having a hard time picking what to eat?
               <br />
               Enter a location, share your room code & start swiping!
             </p>
@@ -268,11 +268,11 @@ function Search() {
                   </a>
                 </div>
                 <div id="collapseOne" className="collapse">
-                  <div className="row mb-2">
+                  <div className="row">
                     <NumCardsSec handleInputChange={handleInputChange} />
                     <SearchBySec handleInputChange={handleInputChange} />
                   </div>
-                  <div className="row mb-2">
+                  <div className="row">
                     <PriceRangeSec
                       formData={formData}
                       handleInputChange={handleInputChange}
@@ -383,7 +383,7 @@ function FindSec({ handleInputChange, inputdata }) {
 // html for Num Cards
 function NumCardsSec({ handleInputChange }) {
   return (
-    <div className="input-group col-sm mb-2">
+    <div className="input-group col-sm mb-3">
       <div className="input-group-prepend">
         <label className="input-group-text" htmlFor="inputGroupSelect01">
           # Cards
@@ -407,7 +407,7 @@ function NumCardsSec({ handleInputChange }) {
 // html for Search by
 function SearchBySec({ handleInputChange }) {
   return (
-    <div className="input-group col-sm mb-2">
+    <div className="input-group col-sm mb-3">
       <div className="input-group-prepend">
         <label className="input-group-text" htmlFor="inputGroupSelect01">
           Search
@@ -431,7 +431,7 @@ function SearchBySec({ handleInputChange }) {
 // html for Open Now Button
 function OpenNowSec({ handleInputChange }) {
   return (
-    <div className="input-group col-sm mb-2">
+    <div className="input-group col-sm mb-3">
       <div className="custom-control custom-switch">
         <input
           name="isopennow"
