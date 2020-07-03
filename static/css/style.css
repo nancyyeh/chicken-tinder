@@ -340,3 +340,8 @@ h2 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* change cursor */
+#more-options-button:hover {
+  cursor: pointer;
+}

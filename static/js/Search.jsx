@@ -107,12 +107,11 @@ function Search() {
   };
 
   const shareLink = (event) => {
-    const sharedUrl = document.getElementById("link");
     const shareData = {
       title: "What should we eat?",
       text:
-        "Click on the link to pick the resturants we should eat at! Link expires in 90 mins.",
-      url: sharedUrl,
+        "Click on the link to pick the restaurants we should eat at! Link expires in 90 mins.",
+      url: url,
     };
     if (navigator.share) {
       navigator
