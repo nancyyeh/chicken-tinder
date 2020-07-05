@@ -15,7 +15,7 @@ API_KEY = os.environ['YELP_KEY']
 def create_shortcodes():
     """create all shortcode"""
 
-    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    letters = "ABFJNP"
     lst_code = list(permutations(letters, 4))
     shuffle(lst_code)
     bad = {'ANAL', 'ANUS', 'ARSE', 'CLIT', 'COCK',
