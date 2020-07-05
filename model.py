@@ -1,8 +1,11 @@
 """Models for chicken tinder app."""
 
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 db = SQLAlchemy()
+
+DATABASE_URL = os.environ['DATABASE_URL']
 
 
 class Search(db.Model):
@@ -135,7 +138,7 @@ class ShortCode(db.Model):
         return f'<Short Code={self.id} search_id={self.search_id} short_code={self.short_code} date={self.date_added}>'
 
 
-def connect_to_db(flask_app, db_uri='postgresql:///chicken_tinder', echo=False):
+def connect_to_db(flask_app, db_uri=DATABASE_URL, echo=False):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     flask_app.config['SQLALCHEMY_ECHO'] = echo
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
