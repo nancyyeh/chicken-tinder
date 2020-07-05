@@ -153,4 +153,4 @@ def reverse_geolocation():
 
 if __name__ == '__main__':
     connect_to_db(app)
-    app.run(host='0.0.0.0', port=33507, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=False)
