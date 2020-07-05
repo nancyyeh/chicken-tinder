@@ -2,24 +2,14 @@
 
 from model import db, Search, User, Like, Business, SearchBusiness, connect_to_db, ShortCode
 import requests
-import os
 import json
-import server
-import model
 import uuid
+import os
 from datetime import datetime, timedelta
 from itertools import permutations
 from random import shuffle
 
-# insert API key for testing
 API_KEY = os.environ['YELP_KEY']
-
-# create date base
-os.system('dropdb chicken_tinder')
-os.system('createdb chicken_tinder')
-
-model.connect_to_db(server.app)
-model.db.create_all()
 
 
 def create_shortcodes():
@@ -42,11 +32,6 @@ def create_shortcodes():
             code = ShortCode(short_code=code_str)
             db.session.add(code)
     db.session.commit()
-
-
-# run short code function only if not created
-if ShortCode.query.count() == 0:
-    create_shortcodes()
 
 
 def create_search(num_search=20, price_range=None):

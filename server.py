@@ -5,21 +5,20 @@ from flask import (Flask, render_template, request,
 from model import connect_to_db
 import model
 import crud
-# comment out if just testing crud | there is a circulate dependency
 import os
 import requests
 
 from jinja2 import StrictUndefined
 
-GOOGLE_KEY = os.environ['GOOGLE_KEY']
 
 app = Flask(__name__)
-app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 # This configuration option makes the Flask interactive debugger
 # more useful (you should remove this line in production though)
 app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True
+
+GOOGLE_KEY = os.environ['GOOGLE_KEY']
 
 
 @app.route('/', defaults={'path': ''})
