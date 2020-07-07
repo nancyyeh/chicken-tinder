@@ -71,11 +71,7 @@ function SwipeApp() {
     [busData]
   );
 
-  /* swiping love and hate - used guiding codes from 
-  https://codepen.io/dylangggg/full/aeoEpQ 
-  https://codepen.io/RobVermeer/full/japZpY
-  https://codepen.io/loringdodge/full/BNmRrK
-  */
+  /* swiping love and hate */
   const mouseMove = (event) => {
     if (dragging && swipeable) {
       const leftValue = event.clientX - initMousePos.x;

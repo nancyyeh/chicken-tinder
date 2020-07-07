@@ -29,8 +29,6 @@ function Search() {
     if (formData.numsearch === "") {
       formData.numsearch = "5";
     }
-    // const x = JSON.stringify(formData);
-    // alert(`Submitted ${x}`);
 
     fetch("/api/search", {
       method: "POST",
