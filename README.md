@@ -8,20 +8,20 @@ Youtube Demo: https://youtu.be/vD0Um8kUNpk
 # 💡Features
 
 - Create a search that gathers yelp resturants - Form fields: Find, Near, Num of Cards(to swipe), Open Now, Price Range, Search by
-  ![](page1.gif)
+  ![](screen_shots/Final/page1.gif)
 - Current location button (works only on secure https)
-  ![](page1-3.gif)
+  ![](screen_shots/Final/page1-3.gif)
 - Generate link to share with other users - room code included in link
 - Ability to share link or copy to clipboard
-  ![](page1-1.gif)
+  ![](screen_shots/Final/page1-1.gif)
   (for mobile - a share navigator will open)
-  ![](page1-2.gif)
+  ![](screen_shots/Final/page1-2.gif)
 - Input Name (12 char) and Room code (4 char) to join - handles invalid room code (expires in 90 mins) - avoid same name entering room twice - ability to jump to results with 4 letter room code
-  ![](page2.gif)
+  ![](screen_shots/Final/page2.gif)
 - Swiping cards / Like & Dislike button - build with CSS / React using guiding code from - https://codepen.io/dylangggg/full/aeoEpQ - https://codepen.io/RobVermeer/full/japZpY - https://codepen.io/loringdodge/full/BNmRrK
-  ![](page3.gif)
+  ![](screen_shots/Final/page3.gif)
 - Show winning results - hanle no matches
-  ![](page4.gif)
+  ![](screen_shots/Final/page4.gif)
 
 ## Database
 
