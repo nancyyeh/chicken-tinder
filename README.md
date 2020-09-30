@@ -1,6 +1,6 @@
 # 🍗 Chicken Tinder
 
-Chicken Tinder is a web appto help friends and family agree on places to eat, built with Yelp Business Search and Google Geolocation API using React, Python, JavaScript and PostgresSQL.
+Chicken Tinder is a web app that helps friends and family agree on places to eat, built with Yelp Business Search and Google Geolocation API using React, Python, JavaScript and PostgresSQL.
 
 [https://www.chickentinder.me/](https://www.chickentinder.me/)
 Youtube Demo: https://youtu.be/vD0Um8kUNpk
